@@ -181,4 +181,3 @@ class SoulNote(db.Model, SerializerMixin):
             raise ValueError("Message must be non-empty and less than 500 characters.")
         return message
 
-
