@@ -9,27 +9,24 @@ import NotFound from './components/NotFound';
 import './index.css';
 
 export const UserContext = createContext(null);
-export const ThemeContext = createContext(null); // NEW: Context for theme
+export const ThemeContext = createContext(null);
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [globalError, setGlobalError] = useState(null);
-  // NEW: State for dark mode, initialized from localStorage or default to false (light)
   const [isDarkMode, setIsDarkMode] = useState(
     localStorage.getItem('darkMode') === 'true'
   );
 
-  // Effect to toggle 'dark-mode' class on body
   useEffect(() => {
     if (isDarkMode) {
       document.body.classList.add('dark-mode');
     } else {
       document.body.classList.remove('dark-mode');
     }
-    // Save theme preference to localStorage
     localStorage.setItem('darkMode', isDarkMode);
-  }, [isDarkMode]); // Re-run effect when isDarkMode changes
+  }, [isDarkMode]);
 
   useEffect(() => {
     function checkSession() {
@@ -86,10 +83,9 @@ function App() {
 
   return (
     <Router>
-      {/* NEW: ThemeContext.Provider wraps UserContext.Provider */}
       <ThemeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
         <UserContext.Provider value={{ user, setUser }}>
-          <div className="flex-column min-h-screen"> {/* Removed bg-purple-soft-gradient to allow body to handle it */}
+          <div className="flex-column min-h-screen">
             <Switch>
               <Route exact path="/" component={Home} />
               <Route path="/login" component={Login} />

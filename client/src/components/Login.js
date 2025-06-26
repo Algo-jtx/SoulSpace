@@ -10,7 +10,7 @@ function Login() {
   const { setUser } = useContext(UserContext);
   const history = useHistory();
 
-  const handleSubmit = (e) => { // Removed 'async' keyword
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
     setIsLoading(true);

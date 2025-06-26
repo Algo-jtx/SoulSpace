@@ -5,7 +5,6 @@ function BreathGround() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState([]);
 
-  // Function to fetch techniques
   const fetchTechniques = () => {
     setIsLoading(true);
     setErrors([]);
@@ -18,7 +17,7 @@ function BreathGround() {
         return response.json().then(errorData => Promise.reject(errorData.errors || `Server responded with status: ${response.status}`));
       })
       .then(data => {
-        setTechniques(data.techniques || []); // Ensure 'techniques' array exists
+        setTechniques(data.techniques || []); 
       })
       .catch(err => {
         console.error("Error fetching breath & ground techniques:", err);
@@ -29,7 +28,6 @@ function BreathGround() {
       });
   };
 
-  // Fetch techniques when the component mounts
   useEffect(() => {
     fetchTechniques();
   }, []);
@@ -53,7 +51,7 @@ function BreathGround() {
       )}
 
       {!isLoading && techniques.length > 0 && (
-        <div className="techniques-grid letters-grid"> {/* Reusing letters-grid for layout */}
+        <div className="techniques-grid letters-grid">
           {techniques.map((technique, index) => (
             <div key={index} className="technique-card card">
               <h3 className="text-xl font-bold text-indigo-700 mb-2">{technique.name}</h3>
