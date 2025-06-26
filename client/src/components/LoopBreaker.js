@@ -5,11 +5,10 @@ function LoopBreaker() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState([]);
 
-  // Function to fetch a new random prompt
   const fetchNewPrompt = () => {
     setIsLoading(true);
     setErrors([]);
-    setPrompt(''); // Clear previous prompt while loading
+    setPrompt(''); 
 
     fetch('/loop_breaker/prompt')
       .then(response => {
@@ -30,7 +29,6 @@ function LoopBreaker() {
       });
   };
 
-  // Fetch a prompt when the component mounts
   useEffect(() => {
     fetchNewPrompt();
   }, []);
