@@ -17,7 +17,7 @@ function Home() {
         </p>
       </header>
 
-      <main className="flex-column flex-center gap-4"> {/* Using gap-4 class */}
+      <main className="flex-column flex-center gap-4">
         {user ? (
           <p className="text-lg text-gray-700">
             Welcome back, <span className="font-semibold text-indigo-700">{user.username}</span>!

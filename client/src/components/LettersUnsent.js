@@ -1,31 +1,29 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from '../App'; // To get the logged-in user context
-import { useRouteMatch } from 'react-router-dom'; // For dynamic routes for edit/detail pages (if implemented later)
+import { UserContext } from '../App'; 
+import { useRouteMatch } from 'react-router-dom'; 
 
 function LettersUnsent() {
-  const { user } = useContext(UserContext); // Get current user from context
-  const [letters, setLetters] = useState([]); // State to store fetched letters
-  const [title, setTitle] = useState(''); // State for new letter title input
-  const [content, setContent] = useState(''); // State for new letter content input
-  const [errors, setErrors] = useState([]); // State for form errors
-  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
-  const [editingLetter, setEditingLetter] = useState(null); // State to hold letter being edited
-  const [showForm, setShowForm] = useState(false); // State to toggle create/edit form visibility
+  const { user } = useContext(UserContext); 
+  const [letters, setLetters] = useState([]); 
+  const [title, setTitle] = useState(''); 
+  const [content, setContent] = useState(''); 
+  const [errors, setErrors] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false); 
+  const [editingLetter, setEditingLetter] = useState(null); 
+  const [showForm, setShowForm] = useState(false); 
 
-  // Function to fetch all letters for the logged-in user
   const fetchLetters = () => {
     setIsLoading(true);
-    fetch('/letters') // GET request to backend /letters endpoint
+    fetch('/letters') 
       .then(response => {
         if (response.ok) {
           return response.json();
         }
-        // If not ok, throw an error to be caught by the .catch block
         return response.json().then(errorData => Promise.reject(errorData.errors || 'Failed to fetch letters.'));
       })
       .then(data => {
-        setLetters(data); // Update letters state with fetched data
-        setErrors([]); // Clear any previous errors
+        setLetters(data); 
+        setErrors([]); 
       })
       .catch(err => {
         console.error("Error fetching letters:", err);
@@ -36,16 +34,15 @@ function LettersUnsent() {
       });
   };
 
-  // Fetch letters when the component mounts or user changes
   useEffect(() => {
-    if (user) { // Only fetch if a user is logged in
+    if (user) { 
       fetchLetters();
     } else {
-      setLetters([]); // Clear letters if user logs out
+      setLetters([]);
     }
-  }, [user]); // Re-run effect if 'user' object changes
+  }, [user]);
 
-  // Function to handle creating/updating a letter
+  // creatingandupdating a letter
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
@@ -72,14 +69,13 @@ function LettersUnsent() {
         if (editingLetter) {
           setLetters(letters.map(l => (l.id === newOrUpdatedLetter.id ? newOrUpdatedLetter : l)));
         } else {
-          // If creating, add the new letter to the top of the list
           setLetters([newOrUpdatedLetter, ...letters]);
         }
-        setTitle(''); // Clear form fields
+        setTitle('');
         setContent('');
-        setEditingLetter(null); // Exit editing mode
-        setShowForm(false); // Hide the form after submission
-        setErrors([]); // Clear errors
+        setEditingLetter(null);
+        setShowForm(false);
+        setErrors([]); 
       })
       .catch(err => {
         console.error(`${editingLetter ? 'Update' : 'Create'} letter error:`, err);
@@ -90,10 +86,10 @@ function LettersUnsent() {
       });
   };
 
-  // Function to handle deleting a letter
+  // deleting a letter
   const handleDelete = (letterId) => {
     if (!window.confirm("Are you sure you want to delete this letter? This action cannot be undone.")) {
-      return; // Stop if user cancels
+      return; 
     }
 
     setIsLoading(true);
@@ -102,7 +98,7 @@ function LettersUnsent() {
     })
       .then(response => {
         if (response.ok) {
-          // Filter out the deleted letter from the state
+          // to filterout the deleted letter from the state
           setLetters(letters.filter(l => l.id !== letterId));
           setErrors([]);
         } else {
@@ -118,15 +114,14 @@ function LettersUnsent() {
       });
   };
 
-  // Function to open the form for editing an existing letter
+  //open the form for editing an existing letter
   const handleEditClick = (letter) => {
     setEditingLetter(letter);
     setTitle(letter.title);
     setContent(letter.content);
-    setShowForm(true); // Show the form
+    setShowForm(true); 
   };
 
-  // Function to reset the form (for new letter or cancelling edit)
   const handleCancelEdit = () => {
     setEditingLetter(null);
     setTitle('');
@@ -142,14 +137,12 @@ function LettersUnsent() {
         A private place to write things you can’t say out loud, without the pressure of sending them.
       </p>
 
-      {/* Button to toggle the form for creating/editing */}
       <div className="text-center mb-8">
         <button onClick={() => setShowForm(!showForm)} className="btn btn-secondary">
           {showForm ? 'Hide Form' : (editingLetter ? 'Edit Letter' : 'Write a New Letter')}
         </button>
       </div>
 
-      {/* Letter Creation/Editing Form */}
       {showForm && (
         <div className="card max-w-2xl" style={{ margin: '0 auto 2rem auto' }}>
           <h3 className="text-2xl font-bold text-indigo-700 mb-4 text-center">
@@ -198,7 +191,6 @@ function LettersUnsent() {
         </div>
       )}
 
-      {/* Display Loading/Error/No Letters */}
       {isLoading && <p className="text-center text-purple-700 text-lg">Loading letters...</p>}
       {errors.length > 0 && !isLoading && (
         <div className="error-message text-center" role="alert">
@@ -210,14 +202,13 @@ function LettersUnsent() {
         <p className="text-center text-gray-600 text-lg">No letters found. Click "Write a New Letter" to get started!</p>
       )}
 
-      {/* Letters List */}
       {!isLoading && letters.length > 0 && (
-        <div className="letters-grid"> {/* Custom grid for letters */}
+        <div className="letters-grid"> 
           {letters.map(letter => (
-            <div key={letter.id} className="letter-card card"> {/* Reusing card style */}
+            <div key={letter.id} className="letter-card card">
               <h3 className="text-xl font-bold text-indigo-700 mb-2">{letter.title}</h3>
               <p className="text-gray-700 text-sm mb-4" style={{ flexGrow: 1 }}>
-                {letter.content.substring(0, 150)}{letter.content.length > 150 ? '...' : ''} {/* Show a preview */}
+                {letter.content.substring(0, 150)}{letter.content.length > 150 ? '...' : ''}
               </p>
               <p className="text-gray-500 text-sm">
                 Created: {new Date(letter.created_at).toLocaleDateString()}
@@ -225,7 +216,7 @@ function LettersUnsent() {
               <div className="letter-card-actions flex-center mt-4" style={{ gap: '0.75rem' }}>
                 <button
                   onClick={() => handleEditClick(letter)}
-                  className="btn btn-secondary btn-sm" // btn-sm to be defined in CSS for smaller buttons
+                  className="btn btn-secondary btn-sm" 
                 >
                   Edit
                 </button>
