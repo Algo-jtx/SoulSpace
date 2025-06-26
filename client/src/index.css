@@ -42,6 +42,16 @@ a:hover {
     min-height: 100vh;
 }
 
+/* New: for components that need minimum height relative to content area */
+.min-h-content-area {
+    min-height: calc(100vh - 6rem - 3rem); /* Adjust based on navbar/header/footer height */
+    /* Assuming navbar height ~4rem, and some top/bottom padding 1.5rem each */
+    /* This needs to be refined based on exact Navbar/main padding in App.js/Dashboard.js */
+    /* For simplicity, let's use a percentage of viewport height for now if precise calculation is complex */
+    min-height: 70vh; /* Approximate for dynamic content within main */
+}
+
+
 .flex-center {
     display: flex;
     align-items: center;
@@ -452,6 +462,58 @@ a:hover {
     margin-top: auto;
 }
 
+/* --- User Profile Specific Styles --- */
+.user-profile-info {
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+    text-align: center;
+}
+
+.profile-section-card {
+    max-width: 800px; /* Wider for list content */
+    margin: 0 auto 2rem auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-view-all {
+    margin-left: auto; /* Push button to the right */
+}
+
+.profile-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.profile-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-list-item:last-child {
+    border-bottom: none;
+}
+
+.profile-list-title {
+    font-weight: 500;
+    color: #4a0e91;
+    flex-grow: 1;
+    margin-right: 1rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.profile-list-date {
+    font-size: 0.85rem;
+    color: #6b7280;
+    flex-shrink: 0;
+}
+
 
 /* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
@@ -473,6 +535,14 @@ a:hover {
     }
     .text-username-hide-sm { /* For 'Hello, username!' on Navbar */
         display: none;
+    }
+    .profile-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    .profile-list-date {
+        margin-left: 0;
     }
 }
 
