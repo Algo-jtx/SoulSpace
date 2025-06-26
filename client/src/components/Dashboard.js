@@ -8,38 +8,35 @@ import QuietPage from './QuietPage';
 import LoopBreaker from './LoopBreaker';
 import SoulNotes from './SoulNotes';
 import BreathGround from './BreathGround';
-import UserProfile from './UserProfile'; // NEW: Import the UserProfile component
+import UserProfile from './UserProfile'; 
 
 function Dashboard() {
   const { user, setUser } = useContext(UserContext);
   const history = useHistory();
-  let { path, url } = useRouteMatch(); // Get parent path and URL for nested routes
+  let { path, url } = useRouteMatch(); 
 
-  // Handle user logout
   const handleLogout = () => {
     fetch('/logout', { method: 'DELETE' })
       .then(response => {
         if (response.ok) {
-          setUser(null); // Clear user state
-          history.push('/login'); // Redirect to login page using history.push
+          setUser(null); 
+          history.push('/login'); 
         } else {
           response.json().then(errorData => {
             console.error('Logout failed:', errorData);
-            alert('Failed to log out. Please try again.'); // Using alert for now, will replace with custom modal
+            alert('Failed to log out. Please try again.');
           }).catch(() => {
-            alert('Failed to log out. An unknown error occurred.'); // Fallback if JSON parsing fails
+            alert('Failed to log out. An unknown error occurred.'); 
           });
         }
       })
       .catch(error => {
         console.error('Logout network error:', error);
-        alert('Network error during logout. Please try again.'); // Using alert for now
+        alert('Network error during logout. Please try again.'); 
       });
   };
 
   if (!user) {
-    // This case should ideally be handled by the parent App.js with the protected route,
-    // but it's a good fallback for type safety or direct access attempts.
     return (
       <div className="flex-center min-h-screen bg-red-100">
         <p className="text-red-700">Access Denied. Please <Link to="/login" className="text-purple-700 font-semibold">login</Link>.</p>
@@ -49,19 +46,17 @@ function Dashboard() {
 
   return (
     <div className="flex-column min-h-screen bg-purple-soft-gradient text-gray-800">
-      <Navbar onLogout={handleLogout} /> {/* Pass logout handler to Navbar */}
+      <Navbar onLogout={handleLogout} />
 
       <main className="flex-grow p-6">
         <h1 className="text-4xl font-bold text-indigo-700 mb-8 text-center">Your SoulSpace Dashboard</h1>
         <div className="dashboard-grid">
-          {/* New: Link to User Profile */}
           <Link to={`${url}/profile`} className="dashboard-card">
             <span className="dashboard-card-icon" role="img" aria-label="user profile">👤</span>
             <h2 className="dashboard-card-title">My Profile</h2>
             <p className="dashboard-card-description">Overview of your SoulSpace journey.</p>
           </Link>
 
-          {/* Existing Feature Cards/Links */}
           <Link to={`${url}/letters`} className="dashboard-card">
             <span className="dashboard-card-icon" role="img" aria-label="envelope">✉️</span>
             <h2 className="dashboard-card-title">Letters Unsent</h2>
@@ -94,17 +89,14 @@ function Dashboard() {
           </Link>
         </div>
 
-        {/* Nested Routes for individual features within the Dashboard */}
-        {/* The order matters in Switch for specificity */}
         <Switch>
-          <Route path={`${path}/profile`} component={UserProfile} /> {/* NEW: Route for UserProfile */}
+          <Route path={`${path}/profile`} component={UserProfile} /> 
           <Route path={`${path}/letters`} component={LettersUnsent} />
           <Route path={`${path}/time-capsules`} component={TimeCapsules} />
           <Route path={`${path}/quiet-page`} component={QuietPage} />
           <Route path={`${path}/loop-breaker`} component={LoopBreaker} />
           <Route path={`${path}/soul-notes`} component={SoulNotes} />
           <Route path={`${path}/breath-ground`} component={BreathGround} />
-          {/* Add a default dashboard view if no specific feature path is matched */}
           <Route exact path={path} render={() => (
              <p className="text-center text-gray-700 text-lg mt-8">Select a feature above to get started!</p>
           )} />
