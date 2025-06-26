@@ -3,7 +3,9 @@ from flask import request, session, make_response, jsonify
 from flask_restful import Resource
 import traceback
 import os
-from functools import wraps # For creating decorators
+from functools import wraps
+from datetime import datetime # Import datetime for date comparisons
+from random import randint, choice # For SoulNote and Loop Breaker
 
 # Local imports
 from config import app, db, api, bcrypt
@@ -19,11 +21,10 @@ def login_required(f):
     Decorator to protect routes, ensuring only logged-in users can access them.
     Checks for 'user_id' in session.
     """
-    @wraps(f) # Helps preserve original function's metadata
+    @wraps(f)
     def decorated_function(*args, **kwargs):
         user_id = session.get('user_id')
         if not user_id:
-            # If no user_id in session, return a 401 Unauthorized response
             return make_response(
                 jsonify({"errors": "Unauthorized: Please log in to access this resource."}),
                 401
@@ -34,43 +35,32 @@ def login_required(f):
 # --- Root Route ---
 @app.route('/')
 def index():
-    """
-    Root route for the API.
-    Used to confirm the server is running.
-    """
     return '<h1>SoulSpace API</h1>'
 
 # --- Resource for Handling Errors (Keep existing) ---
 @app.errorhandler(ValidationError)
 def handle_validation_error(e):
-    """Custom error handler for ValidationError."""
     return make_response(jsonify({"errors": str(e)}), 400)
 
 @app.errorhandler(401)
 def handle_unauthorized(e):
-    """Custom error handler for 401 Unauthorized errors."""
     return make_response(jsonify({"errors": "Unauthorized: Please log in."}), 401)
 
 @app.errorhandler(403)
 def handle_forbidden(e):
-    """Custom error handler for 403 Forbidden errors."""
     return make_response(jsonify({"errors": "Forbidden: You do not have permission to access this resource."}), 403)
 
 @app.errorhandler(404)
 def handle_not_found(e):
-    """Custom error handler for 404 Not Found errors."""
     return make_response(jsonify({"errors": "Resource not found."}), 404)
 
 @app.errorhandler(500)
 def handle_internal_server_error(e):
-    """Custom error handler for 500 Internal Server Errors."""
-    if app.debug:
-        print(traceback.format_exc())
+    if app.debug: print(traceback.format_exc())
     return make_response(jsonify({"errors": "An internal server error occurred."}), 500)
 
 # --- Authentication Resources (Keep existing) ---
 class Signup(Resource):
-    """Handles user registration (signup)."""
     def post(self):
         try:
             data = request.get_json()
@@ -102,7 +92,6 @@ class Signup(Resource):
 api.add_resource(Signup, '/signup')
 
 class Login(Resource):
-    """Handles user login."""
     def post(self):
         try:
             data = request.get_json()
@@ -125,7 +114,6 @@ class Login(Resource):
 api.add_resource(Login, '/login')
 
 class CheckSession(Resource):
-    """Checks if a user is currently logged in."""
     def get(self):
         user_id = session.get('user_id')
         if user_id:
@@ -139,25 +127,17 @@ class CheckSession(Resource):
 api.add_resource(CheckSession, '/check_session')
 
 class Logout(Resource):
-    """Handles user logout."""
     def delete(self):
         session.pop('user_id', None)
         return make_response(jsonify({"message": "Successfully logged out."}), 204)
 api.add_resource(Logout, '/logout')
 
-# --- Letters Unsent Resources ---
-
+# --- Letters Unsent Resources (Keep existing) ---
 class LettersResource(Resource):
-    """
-    Handles GET for all letters of the logged-in user, and POST for creating a new letter.
-    """
-    decorators = [login_required] # Apply login_required decorator to all methods in this class
-
+    decorators = [login_required]
     def get(self):
-        """Get all letters for the current user."""
         try:
             user_id = session['user_id']
-            # Fetch letters associated with the logged-in user, ordered by creation date (newest first)
             letters = Letter.query.filter_by(user_id=user_id).order_by(Letter.created_at.desc()).all()
             return [letter.to_dict() for letter in letters], 200
         except Exception as e:
@@ -165,7 +145,6 @@ class LettersResource(Resource):
             return make_response(jsonify({"errors": "Failed to fetch letters."}), 500)
 
     def post(self):
-        """Create a new letter for the current user."""
         try:
             user_id = session['user_id']
             data = request.get_json()
@@ -175,62 +154,44 @@ class LettersResource(Resource):
             if not all([title, content]):
                 raise ValidationError("Title and content are required for a letter.")
 
-            new_letter = Letter(
-                user_id=user_id,
-                title=title,
-                content=content
-            )
+            new_letter = Letter(user_id=user_id, title=title, content=content)
             db.session.add(new_letter)
             db.session.commit()
             return new_letter.to_dict(), 201
-        except ValueError as ve: # Catch validation errors from models (e.g., title/content constraints)
+        except ValueError as ve:
             db.session.rollback()
             return make_response(jsonify({"errors": str(ve)}), 400)
         except Exception as e:
             db.session.rollback()
             if app.debug: print(f"Error creating letter: {e}\n{traceback.format_exc()}")
             return make_response(jsonify({"errors": "Failed to create letter."}), 500)
-
 api.add_resource(LettersResource, '/letters')
 
-
 class LetterByIdResource(Resource):
-    """
-    Handles GET, PATCH, and DELETE for a specific letter by its ID.
-    Ensures the letter belongs to the logged-in user.
-    """
-    decorators = [login_required] # Apply login_required decorator
-
+    decorators = [login_required]
     def get(self, id):
-        """Get a specific letter by ID."""
         try:
             user_id = session['user_id']
             letter = Letter.query.filter_by(id=id, user_id=user_id).first()
-            if not letter:
-                return make_response(jsonify({"errors": "Letter not found or unauthorized."}), 404)
+            if not letter: return make_response(jsonify({"errors": "Letter not found or unauthorized."}), 404)
             return letter.to_dict(), 200
         except Exception as e:
             if app.debug: print(f"Error fetching letter (ID: {id}): {e}\n{traceback.format_exc()}")
             return make_response(jsonify({"errors": "Failed to fetch letter."}), 500)
 
     def patch(self, id):
-        """Update a specific letter by ID."""
         try:
             user_id = session['user_id']
             letter = Letter.query.filter_by(id=id, user_id=user_id).first()
-            if not letter:
-                return make_response(jsonify({"errors": "Letter not found or unauthorized."}), 404)
+            if not letter: return make_response(jsonify({"errors": "Letter not found or unauthorized."}), 404)
 
             data = request.get_json()
-            # Only update provided fields
-            if 'title' in data:
-                letter.title = data['title']
-            if 'content' in data:
-                letter.content = data['content']
+            if 'title' in data: letter.title = data['title']
+            if 'content' in data: letter.content = data['content']
             
             db.session.commit()
             return letter.to_dict(), 200
-        except ValueError as ve: # Catch validation errors from models
+        except ValueError as ve:
             db.session.rollback()
             return make_response(jsonify({"errors": str(ve)}), 400)
         except Exception as e:
@@ -239,12 +200,10 @@ class LetterByIdResource(Resource):
             return make_response(jsonify({"errors": "Failed to update letter."}), 500)
 
     def delete(self, id):
-        """Delete a specific letter by ID."""
         try:
             user_id = session['user_id']
             letter = Letter.query.filter_by(id=id, user_id=user_id).first()
-            if not letter:
-                return make_response(jsonify({"errors": "Letter not found or unauthorized."}), 404)
+            if not letter: return make_response(jsonify({"errors": "Letter not found or unauthorized."}), 404)
 
             db.session.delete(letter)
             db.session.commit()
@@ -253,9 +212,303 @@ class LetterByIdResource(Resource):
             db.session.rollback()
             if app.debug: print(f"Error deleting letter (ID: {id}): {e}\n{traceback.format_exc()}")
             return make_response(jsonify({"errors": "Failed to delete letter."}), 500)
+api.add_resource(LetterByIdResource, '/letters/<int:id>')
 
-api.add_resource(LetterByIdResource, '/letters/<int:id>') # Route with ID parameter
+# --- Time Capsules Resources (Keep existing) ---
+class TimeCapsulesResource(Resource):
+    decorators = [login_required]
 
+    def get(self):
+        try:
+            user_id = session['user_id']
+            time_capsules = TimeCapsule.query.filter_by(user_id=user_id).order_by(TimeCapsule.open_date.asc()).all()
+            return [tc.to_dict() for tc in time_capsules], 200
+        except Exception as e:
+            if app.debug: print(f"Error fetching time capsules: {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to fetch time capsules."}), 500)
+
+    def post(self):
+        try:
+            user_id = session['user_id']
+            data = request.get_json()
+            message = data.get('message')
+            open_date_str = data.get('open_date')
+
+            if not all([message, open_date_str]):
+                raise ValidationError("Message and open date are required for a time capsule.")
+
+            try:
+                open_date = datetime.fromisoformat(open_date_str)
+            except ValueError:
+                open_date = datetime.strptime(open_date_str, '%Y-%m-%d')
+
+
+            new_time_capsule = TimeCapsule(
+                user_id=user_id,
+                message=message,
+                open_date=open_date
+            )
+            db.session.add(new_time_capsule)
+            db.session.commit()
+            return new_time_capsule.to_dict(), 201
+        except ValueError as ve:
+            db.session.rollback()
+            return make_response(jsonify({"errors": str(ve)}), 400)
+        except Exception as e:
+            db.session.rollback()
+            if app.debug: print(f"Error creating time capsule: {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to create time capsule."}), 500)
+api.add_resource(TimeCapsulesResource, '/time_capsules')
+
+
+class TimeCapsuleByIdResource(Resource):
+    decorators = [login_required]
+
+    def get(self, id):
+        try:
+            user_id = session['user_id']
+            time_capsule = TimeCapsule.query.filter_by(id=id, user_id=user_id).first()
+            if not time_capsule:
+                return make_response(jsonify({"errors": "Time Capsule not found or unauthorized."}), 404)
+            return time_capsule.to_dict(), 200
+        except Exception as e:
+            if app.debug: print(f"Error fetching time capsule (ID: {id}): {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to fetch time capsule."}), 500)
+
+    def patch(self, id):
+        try:
+            user_id = session['user_id']
+            time_capsule = TimeCapsule.query.filter_by(id=id, user_id=user_id).first()
+            if not time_capsule:
+                return make_response(jsonify({"errors": "Time Capsule not found or unauthorized."}), 404)
+
+            data = request.get_json()
+            if 'message' in data:
+                time_capsule.message = data['message']
+            if 'open_date' in data:
+                try:
+                    open_date = datetime.fromisoformat(data['open_date'])
+                    time_capsule.open_date = open_date
+                except ValueError:
+                    return make_response(jsonify({"errors": "Invalid date format for open_date."}), 400)
+            
+            db.session.commit()
+            return time_capsule.to_dict(), 200
+        except ValueError as ve:
+            db.session.rollback()
+            return make_response(jsonify({"errors": str(ve)}), 400)
+        except Exception as e:
+            db.session.rollback()
+            if app.debug: print(f"Error updating time capsule (ID: {id}): {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to update time capsule."}), 500)
+
+    def delete(self, id):
+        try:
+            user_id = session['user_id']
+            time_capsule = TimeCapsule.query.filter_by(id=id, user_id=user_id).first()
+            if not time_capsule:
+                return make_response(jsonify({"errors": "Time Capsule not found or unauthorized."}), 404)
+
+            db.session.delete(time_capsule)
+            db.session.commit()
+            return make_response(jsonify({"message": "Time Capsule deleted successfully."}), 204)
+        except Exception as e:
+            db.session.rollback()
+            if app.debug: print(f"Error deleting time capsule (ID: {id}): {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to delete time capsule."}), 500)
+api.add_resource(TimeCapsuleByIdResource, '/time_capsules/<int:id>')
+
+
+# --- User Notes Resources (The Quiet Page) ---
+class UserNotesResource(Resource):
+    """
+    Handles GET for all user notes of the logged-in user, and POST for creating a new user note.
+    """
+    decorators = [login_required]
+
+    def get(self):
+        """Get all user notes for the current user."""
+        try:
+            user_id = session['user_id']
+            # User notes often behave more like a single editable document or a few,
+            # so fetching all makes sense, ordered by creation.
+            user_notes = UserNote.query.filter_by(user_id=user_id).order_by(UserNote.created_at.desc()).all()
+            return [note.to_dict() for note in user_notes], 200
+        except Exception as e:
+            if app.debug: print(f"Error fetching user notes: {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to fetch user notes."}), 500)
+
+    def post(self):
+        """Create a new user note for the current user."""
+        try:
+            user_id = session['user_id']
+            data = request.get_json()
+            content = data.get('content')
+
+            if not content:
+                raise ValidationError("Content is required for a user note.")
+
+            new_user_note = UserNote(
+                user_id=user_id,
+                content=content
+            )
+            db.session.add(new_user_note)
+            db.session.commit()
+            return new_user_note.to_dict(), 201
+        except ValueError as ve:
+            db.session.rollback()
+            return make_response(jsonify({"errors": str(ve)}), 400)
+        except Exception as e:
+            db.session.rollback()
+            if app.debug: print(f"Error creating user note: {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to create user note."}), 500)
+api.add_resource(UserNotesResource, '/user_notes')
+
+class UserNoteByIdResource(Resource):
+    """
+    Handles GET, PATCH, and DELETE for a specific user note by its ID.
+    Ensures the user note belongs to the logged-in user.
+    """
+    decorators = [login_required]
+
+    def get(self, id):
+        """Get a specific user note by ID."""
+        try:
+            user_id = session['user_id']
+            user_note = UserNote.query.filter_by(id=id, user_id=user_id).first()
+            if not user_note:
+                return make_response(jsonify({"errors": "User Note not found or unauthorized."}), 404)
+            return user_note.to_dict(), 200
+        except Exception as e:
+            if app.debug: print(f"Error fetching user note (ID: {id}): {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to fetch user note."}), 500)
+
+    def patch(self, id):
+        """Update a specific user note by ID."""
+        try:
+            user_id = session['user_id']
+            user_note = UserNote.query.filter_by(id=id, user_id=user_id).first()
+            if not user_note:
+                return make_response(jsonify({"errors": "User Note not found or unauthorized."}), 404)
+
+            data = request.get_json()
+            if 'content' in data:
+                user_note.content = data['content']
+            
+            db.session.commit()
+            return user_note.to_dict(), 200
+        except ValueError as ve:
+            db.session.rollback()
+            return make_response(jsonify({"errors": str(ve)}), 400)
+        except Exception as e:
+            db.session.rollback()
+            if app.debug: print(f"Error updating user note (ID: {id}): {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to update user note."}), 500)
+
+    def delete(self, id):
+        """Delete a specific user note by ID."""
+        try:
+            user_id = session['user_id']
+            user_note = UserNote.query.filter_by(id=id, user_id=user_id).first()
+            if not user_note:
+                return make_response(jsonify({"errors": "User Note not found or unauthorized."}), 404)
+
+            db.session.delete(user_note)
+            db.session.commit()
+            return make_response(jsonify({"message": "User Note deleted successfully."}), 204)
+        except Exception as e:
+            db.session.rollback()
+            if app.debug: print(f"Error deleting user note (ID: {id}): {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to delete user note."}), 500)
+api.add_resource(UserNoteByIdResource, '/user_notes/<int:id>')
+
+
+# --- Soul Notes Resources ---
+class RandomSoulNoteResource(Resource):
+    """
+    Handles GET for a random SoulNote (not user-specific).
+    """
+    # This resource does not require login_required as it's meant to be publicly accessible
+    # or accessible to any logged-in user without specific ownership.
+    def get(self):
+        """Get a random SoulNote."""
+        try:
+            # Get a random SoulNote from the database
+            # This is a common pattern for fetching a single random row in SQLAlchemy
+            count = db.session.query(SoulNote).count()
+            if count == 0:
+                return make_response(jsonify({"message": "No soul notes available."}), 200)
+            
+            random_offset = max(0, randint(0, count - 1)) # Ensure offset is not negative
+            soul_note = SoulNote.query.offset(random_offset).limit(1).first()
+
+            if not soul_note:
+                return make_response(jsonify({"message": "Could not retrieve a random soul note."}), 404)
+            return soul_note.to_dict(), 200
+        except Exception as e:
+            if app.debug: print(f"Error fetching random soul note: {e}\n{traceback.format_exc()}")
+            return make_response(jsonify({"errors": "Failed to retrieve soul note."}), 500)
+api.add_resource(RandomSoulNoteResource, '/soul_notes/random')
+
+
+# --- Loop Breaker Resources ---
+class LoopBreakerPromptResource(Resource):
+    """
+    Handles GET for a random Loop Breaker prompt.
+    """
+    # This can be accessed by any user, logged in or not, if desired.
+    # If it needs to be protected, add @login_required.
+    def get(self):
+        """Get a random Loop Breaker prompt."""
+        # For now, these are static prompts. Can be moved to DB if needed.
+        prompts = [
+            "What is one small thing you can do right now to shift your focus?",
+            "Identify one thought you're stuck on. Is it truly serving you?",
+            "Close your eyes and focus on five things you can hear.",
+            "If this feeling were a cloud, what shape would it be? Watch it drift.",
+            "Name three things you are grateful for in this exact moment.",
+            "What would a wise friend advise you to do right now?",
+            "Consider your breath. Inhale calm, exhale tension.",
+            "What simple act of kindness can you offer yourself today?",
+            "Is there a different perspective you haven't considered yet?",
+            "What if this feeling is just a visitor, not a permanent resident?"
+        ]
+        return make_response(jsonify({"prompt": choice(prompts)}), 200)
+api.add_resource(LoopBreakerPromptResource, '/loop_breaker/prompt')
+
+
+# --- Breath and Ground Resources ---
+class BreathGroundResource(Resource):
+    """
+    Handles GET for Breath & Ground techniques.
+    """
+    # This can be accessed by any user, logged in or not.
+    # If it needs to be protected, add @login_required.
+    def get(self):
+        """Get Breath & Ground techniques."""
+        # For now, static content. Can be moved to DB or more complex structure later.
+        techniques = [
+            {
+                "name": "Box Breathing",
+                "instructions": "Inhale slowly for 4 counts, hold for 4, exhale for 4, hold for 4. Repeat.",
+                "duration": "2-5 minutes"
+            },
+            {
+                "name": "5-4-3-2-1 Grounding",
+                "instructions": "Name 5 things you can see, 4 things you can touch, 3 things you can hear, 2 things you can smell, and 1 thing you can taste.",
+                "duration": "As needed"
+            },
+            {
+                "name": "Deep Belly Breathing",
+                "instructions": "Place one hand on your chest and one on your belly. Breathe deeply so your belly rises, keeping your chest still. Exhale slowly.",
+                "duration": "3-5 minutes"
+            }
+        ]
+        return make_response(jsonify({"techniques": techniques}), 200)
+api.add_resource(BreathGroundResource, '/breath_ground')
+
+
+# --- Run the app ---
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5555))
     app.run(port=port, debug=True)
