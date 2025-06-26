@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { UserContext, ThemeContext } from '../App'; // NEW: Import ThemeContext
+import { UserContext, ThemeContext } from '../App'; 
 
 function Navbar({ onLogout }) {
   const { user } = useContext(UserContext);
-  const { isDarkMode, setIsDarkMode } = useContext(ThemeContext); // NEW: Get dark mode state and setter
+  const { isDarkMode, setIsDarkMode } = useContext(ThemeContext);
   const history = useHistory();
 
-  // Function to toggle dark mode
   const toggleDarkMode = () => {
     setIsDarkMode(prevMode => !prevMode);
   };
@@ -19,9 +18,8 @@ function Navbar({ onLogout }) {
       </Link>
 
       <div className="navbar-links">
-        {/* NEW: Dark Mode Toggle Button */}
-        <button onClick={toggleDarkMode} className="btn-icon"> {/* Need to define .btn-icon in CSS */}
-          {isDarkMode ? '☀️' : '🌙'} {/* Sun for light mode, Moon for dark mode */}
+        <button onClick={toggleDarkMode} className="btn-icon"> 
+          {isDarkMode ? '☀️' : '🌙'} 
         </button>
 
         {user ? (
