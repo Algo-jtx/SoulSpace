@@ -4,8 +4,8 @@ from flask_restful import Resource
 import traceback
 import os
 from functools import wraps
-from datetime import datetime # Import datetime for date comparisons
-from random import randint, choice # For SoulNote and Loop Breaker
+from datetime import datetime
+from random import randint, choice
 
 # Local imports
 from config import app, db, api, bcrypt
@@ -17,10 +17,6 @@ class ValidationError(Exception):
 
 # --- Decorator for Login Protection ---
 def login_required(f):
-    """
-    Decorator to protect routes, ensuring only logged-in users can access them.
-    Checks for 'user_id' in session.
-    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         user_id = session.get('user_id')
@@ -321,17 +317,11 @@ api.add_resource(TimeCapsuleByIdResource, '/time_capsules/<int:id>')
 
 # --- User Notes Resources (The Quiet Page) ---
 class UserNotesResource(Resource):
-    """
-    Handles GET for all user notes of the logged-in user, and POST for creating a new user note.
-    """
     decorators = [login_required]
 
     def get(self):
-        """Get all user notes for the current user."""
         try:
             user_id = session['user_id']
-            # User notes often behave more like a single editable document or a few,
-            # so fetching all makes sense, ordered by creation.
             user_notes = UserNote.query.filter_by(user_id=user_id).order_by(UserNote.created_at.desc()).all()
             return [note.to_dict() for note in user_notes], 200
         except Exception as e:
@@ -339,7 +329,6 @@ class UserNotesResource(Resource):
             return make_response(jsonify({"errors": "Failed to fetch user notes."}), 500)
 
     def post(self):
-        """Create a new user note for the current user."""
         try:
             user_id = session['user_id']
             data = request.get_json()
@@ -365,14 +354,9 @@ class UserNotesResource(Resource):
 api.add_resource(UserNotesResource, '/user_notes')
 
 class UserNoteByIdResource(Resource):
-    """
-    Handles GET, PATCH, and DELETE for a specific user note by its ID.
-    Ensures the user note belongs to the logged-in user.
-    """
     decorators = [login_required]
 
     def get(self, id):
-        """Get a specific user note by ID."""
         try:
             user_id = session['user_id']
             user_note = UserNote.query.filter_by(id=id, user_id=user_id).first()
@@ -384,7 +368,6 @@ class UserNoteByIdResource(Resource):
             return make_response(jsonify({"errors": "Failed to fetch user note."}), 500)
 
     def patch(self, id):
-        """Update a specific user note by ID."""
         try:
             user_id = session['user_id']
             user_note = UserNote.query.filter_by(id=id, user_id=user_id).first()
@@ -406,7 +389,6 @@ class UserNoteByIdResource(Resource):
             return make_response(jsonify({"errors": "Failed to update user note."}), 500)
 
     def delete(self, id):
-        """Delete a specific user note by ID."""
         try:
             user_id = session['user_id']
             user_note = UserNote.query.filter_by(id=id, user_id=user_id).first()
@@ -428,18 +410,13 @@ class RandomSoulNoteResource(Resource):
     """
     Handles GET for a random SoulNote (not user-specific).
     """
-    # This resource does not require login_required as it's meant to be publicly accessible
-    # or accessible to any logged-in user without specific ownership.
     def get(self):
-        """Get a random SoulNote."""
         try:
-            # Get a random SoulNote from the database
-            # This is a common pattern for fetching a single random row in SQLAlchemy
             count = db.session.query(SoulNote).count()
             if count == 0:
                 return make_response(jsonify({"message": "No soul notes available."}), 200)
             
-            random_offset = max(0, randint(0, count - 1)) # Ensure offset is not negative
+            random_offset = max(0, randint(0, count - 1))
             soul_note = SoulNote.query.offset(random_offset).limit(1).first()
 
             if not soul_note:
@@ -456,11 +433,7 @@ class LoopBreakerPromptResource(Resource):
     """
     Handles GET for a random Loop Breaker prompt.
     """
-    # This can be accessed by any user, logged in or not, if desired.
-    # If it needs to be protected, add @login_required.
     def get(self):
-        """Get a random Loop Breaker prompt."""
-        # For now, these are static prompts. Can be moved to DB if needed.
         prompts = [
             "What is one small thing you can do right now to shift your focus?",
             "Identify one thought you're stuck on. Is it truly serving you?",
@@ -482,11 +455,7 @@ class BreathGroundResource(Resource):
     """
     Handles GET for Breath & Ground techniques.
     """
-    # This can be accessed by any user, logged in or not.
-    # If it needs to be protected, add @login_required.
     def get(self):
-        """Get Breath & Ground techniques."""
-        # For now, static content. Can be moved to DB or more complex structure later.
         techniques = [
             {
                 "name": "Box Breathing",
@@ -501,6 +470,21 @@ class BreathGroundResource(Resource):
             {
                 "name": "Deep Belly Breathing",
                 "instructions": "Place one hand on your chest and one on your belly. Breathe deeply so your belly rises, keeping your chest still. Exhale slowly.",
+                "duration": "3-5 minutes"
+            },
+            { # NEW TECHNIQUE
+                "name": "Mindful Walking",
+                "instructions": "As you walk, bring your awareness to each step: the sensation of your feet on the ground, the movement of your legs, and the rhythm of your breath. If your mind wanders, gently bring it back to your steps.",
+                "duration": "5-10 minutes"
+            },
+            { # NEW TECHNIQUE
+                "name": "Body Scan Meditation",
+                "instructions": "Lie down or sit comfortably. Bring your attention to different parts of your body, starting from your toes and slowly moving upwards. Notice any sensations without judgment. Breathe into each area.",
+                "duration": "5-15 minutes"
+            },
+            { # NEW TECHNIQUE
+                "name": "Color Visualization",
+                "instructions": "Close your eyes and imagine a calming color (e.g., soft blue or green). Breathe in this color, imagining it filling your body with peace. Breathe out any tension or discomfort as a contrasting color.",
                 "duration": "3-5 minutes"
             }
         ]

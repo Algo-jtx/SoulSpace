@@ -15,7 +15,7 @@ function UserProfile() {
       setIsLoading(true);
       setErrors([]);
 
-      // Fetch all data in parallel
+      // Fetch all data in parallel using Promise.all for efficiency
       Promise.all([
         fetch('/letters').then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err.errors || 'Failed to fetch letters.'))),
         fetch('/time_capsules').then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err.errors || 'Failed to fetch time capsules.'))),
@@ -28,39 +28,43 @@ function UserProfile() {
       })
       .catch(err => {
         console.error("Error loading user profile data:", err);
+        // Ensure errors are always an array for consistent display
         setErrors(Array.isArray(err) ? err : ['Failed to load profile data. Please try again.']);
       })
       .finally(() => {
         setIsLoading(false);
       });
     } else {
-      setIsLoading(false); // No user, so stop loading
+      setIsLoading(false); // If no user, stop loading immediately
       setLetters([]);
       setTimeCapsules([]);
       setUserNotes([]);
     }
-  }, [user]); // Re-fetch if user changes
+  }, [user]); // Re-fetch data if the logged-in user changes
 
-  // Helper to format dates
+  // Helper function to format date strings for display
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString();
   };
 
-  // Helper to determine if a time capsule is openable
+  // Helper function to check if a time capsule's open date has passed
   const isCapsuleOpenable = (dateString) => {
     const open = new Date(dateString);
     const now = new Date();
-    return open <= now;
+    // Compare dates (ignoring time) to prevent issues with timezone differences
+    return open.setHours(0,0,0,0) <= now.setHours(0,0,0,0);
   };
 
+  // Conditional rendering for loading state
   if (isLoading) {
     return (
-      <div className="container p-6 flex-center min-h-content-area"> {/* min-h-content-area for better loading display */}
+      <div className="container p-6 flex-center min-h-content-area"> {/* Uses min-h-content-area from index.css */}
         <p className="text-xl font-semibold text-purple-700">Loading your SoulSpace profile...</p>
       </div>
     );
   }
 
+  // Conditional rendering for error state
   if (errors.length > 0) {
     return (
       <div className="container p-6 flex-center min-h-content-area">
@@ -87,9 +91,9 @@ function UserProfile() {
         </div>
       )}
 
-      {/* Letters Unsent Summary */}
+      {/* Letters Unsent Summary Section */}
       <div className="profile-section-card card mb-8">
-        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-center" style={{ justifyContent: 'space-between' }}>
+        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-between-center"> {/* Uses flex-between-center from index.css */}
           Letters Unsent ({letters.length})
           <Link to="/dashboard/letters" className="btn btn-secondary btn-sm profile-view-all">View All</Link>
         </h3>
@@ -112,9 +116,9 @@ function UserProfile() {
         )}
       </div>
 
-      {/* Time Capsules Summary */}
+      {/* Time Capsules Summary Section */}
       <div className="profile-section-card card mb-8">
-        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-center" style={{ justifyContent: 'space-between' }}>
+        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-between-center"> {/* Uses flex-between-center from index.css */}
           Time Capsules ({timeCapsules.length})
           <Link to="/dashboard/time-capsules" className="btn btn-secondary btn-sm profile-view-all">View All</Link>
         </h3>
@@ -139,9 +143,9 @@ function UserProfile() {
         )}
       </div>
 
-      {/* The Quiet Page Notes Summary */}
+      {/* The Quiet Page Notes Summary Section */}
       <div className="profile-section-card card">
-        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-center" style={{ justifyContent: 'space-between' }}>
+        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-between-center"> {/* Uses flex-between-center from index.css */}
           Quiet Page Notes ({userNotes.length})
           <Link to="/dashboard/quiet-page" className="btn btn-secondary btn-sm profile-view-all">View Page</Link>
         </h3>

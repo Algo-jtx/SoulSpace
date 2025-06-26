@@ -13,6 +13,8 @@ function QuietPage() {
   useEffect(() => {
     if (user) {
       setIsLoading(true);
+      setErrors([]);
+
       fetch('/user_notes') // Fetch all notes for the user
         .then(response => {
           if (response.ok) {
@@ -27,8 +29,8 @@ function QuietPage() {
             setNoteContent(notes[0].content);
             setCurrentNoteId(notes[0].id);
           } else {
-            setNoteContent(''); // No notes yet
-            setCurrentNoteId(null);
+            setNoteContent(''); // No notes yet, so input starts empty
+            setCurrentNoteId(null); // No note ID if none exist
           }
           setErrors([]);
         })
@@ -68,9 +70,11 @@ function QuietPage() {
         return response.json().then(errorData => Promise.reject(errorData.errors));
       })
       .then(savedNote => {
-        setNoteContent(savedNote.content); // Update with content from server response
-        setCurrentNoteId(savedNote.id); // Ensure we have the ID for future updates
-        setSuccessMessage('Note saved successfully!');
+        // --- START CHANGES HERE ---
+        setNoteContent(''); // Clear the textarea content after successful save
+        setCurrentNoteId(null); // Reset currentNoteId so next save is a new POST
+        // --- END CHANGES HERE ---
+        setSuccessMessage('Note saved successfully! You can write a new note now.'); // More explicit success message
         setErrors([]);
       })
       .catch(err => {
@@ -80,7 +84,7 @@ function QuietPage() {
       .finally(() => {
         setIsLoading(false);
         // Clear success message after a few seconds
-        setTimeout(() => setSuccessMessage(''), 3000);
+        setTimeout(() => setSuccessMessage(''), 5000); // Increased timeout for reading message
       });
   };
 
@@ -99,7 +103,7 @@ function QuietPage() {
         </div>
       )}
       {successMessage && (
-        <div className="success-message text-center" role="alert"> {/* New success message class */}
+        <div className="success-message text-center" role="alert">
           <strong className="font-bold">Success!</strong>
           <span className="ml-2">{successMessage}</span>
         </div>
@@ -125,6 +129,24 @@ function QuietPage() {
           </div>
         </form>
       </div>
+       {/* Optionally display a list of all past notes if needed, but for 'quiet page' it might be simpler to focus on current/new */}
+       {/* If you wanted to show old notes:
+       <div className="mt-8">
+         <h3 className="text-2xl font-bold text-indigo-700 mb-4 text-center">Past Notes</h3>
+         {userNotes.length > 0 ? ( // Assuming you'd fetch all notes here
+           <ul className="profile-list">
+             {userNotes.map(note => (
+               <li key={note.id} className="profile-list-item">
+                 <span className="profile-list-title">{note.content.substring(0, 80)}...</span>
+                 <span className="profile-list-date">({new Date(note.created_at).toLocaleDateString()})</span>
+               </li>
+             ))}
+           </ul>
+         ) : (
+           <p className="text-center text-gray-600">No past notes to display.</p>
+         )}
+       </div>
+       */}
     </div>
   );
 }

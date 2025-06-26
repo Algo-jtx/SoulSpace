@@ -10,31 +10,111 @@
     box-sizing: border-box;
 }
 
+/* Define CSS Variables for light mode (default) */
+:root {
+    --bg-main-light: #f0f4f8;
+    --bg-main-dark: #e6e9f0;
+    --bg-card: #ffffff;
+    --text-primary: #333;
+    --text-secondary: #4b5563;
+    --text-tertiary: #6b7280;
+    --text-headings: #4a0e91;
+    --text-accent: #6a0dad; /* Primary link/highlight */
+    --text-link: #5B21B6; /* For specific links */
+
+    --button-primary-bg: #6a0dad;
+    --button-primary-text: #ffffff;
+    --button-primary-hover-bg: #4a0e91;
+
+    --button-secondary-bg: #e0e7ff;
+    --button-secondary-text: #5B21B6;
+    --button-secondary-hover-bg: #c4b5fd;
+
+    --button-danger-bg: #ef4444; /* Specific red for danger button */
+    --button-danger-text: #ffffff; /* White text on danger button */
+    --button-danger-hover-bg: #dc2626; /* Darker red on hover */
+
+    --border-light: #d1d5db;
+    --focus-border: #6a0dad;
+    --focus-shadow: rgba(106, 13, 173, 0.2);
+    --shadow-light: rgba(0, 0, 0, 0.05);
+    --shadow-medium: rgba(0, 0, 0, 0.1);
+    --shadow-dark: rgba(0, 0, 0, 0.15);
+    --navbar-bg: #ffffff;
+    --error-bg: #fee2e2;
+    --error-border: #f87171;
+    --error-text: #b91c1c;
+    --success-bg: #d1fae5;
+    --success-border: #6ee7b7;
+    --success-text: #047857;
+}
+
+/* Dark mode variables */
+.dark-mode {
+    --bg-main-light: #1a202c; /* Dark charcoal */
+    --bg-main-dark: #2d3748; /* Darker grey-blue */
+    --bg-card: #2f374a; /* Slightly lighter than main background for cards */
+    --text-primary: #e2e8f0; /* Light gray */
+    --text-secondary: #cbd5e0; /* Lighter gray */
+    --text-tertiary: #a0aec0; /* Medium gray */
+    --text-headings: #a78bfa; /* Light purple */
+    --text-accent: #c4b5fd; /* Lighter purple */
+    --text-link: #a78bfa; /* Matches headings/accent */
+
+    --button-primary-bg: #8b5cf6; /* Original purple, stands out */
+    --button-primary-text: #ffffff;
+    --button-primary-hover-bg: #7c3aed;
+
+    --button-secondary-bg: #4a5568; /* Darker secondary */
+    --button-secondary-text: #e2e8f0;
+    --button-secondary-hover-bg: #6b7280;
+
+    --button-danger-bg: #b91c1c; /* Darker red for danger button in dark mode */
+    --button-danger-text: #ffffff; /* White text remains */
+    --button-danger-hover-bg: #8b0000; /* Even darker red on hover */
+
+    --border-light: #4a5568;
+    --focus-border: #a78bfa;
+    --focus-shadow: rgba(167, 139, 250, 0.3);
+    --shadow-light: rgba(0, 0, 0, 0.3); /* Darker shadows for dark mode contrast */
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --shadow-dark: rgba(0, 0, 0, 0.5);
+    --navbar-bg: #2d3748; /* Darker navbar */
+    --error-bg: #fca5a5; /* Lighter red for visibility */
+    --error-border: #ef4444;
+    --error-text: #7f1d1d;
+    --success-bg: #a7f3d0;
+    --success-border: #34d399;
+    --success-text: #065f46;
+}
+
+/* Apply CSS variables throughout the stylesheet */
 body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
-    color: #333;
-    background: linear-gradient(135deg, #f0f4f8, #e6e9f0); /* Soft background gradient */
+    color: var(--text-primary);
+    background: linear-gradient(135deg, var(--bg-main-light), var(--bg-main-dark));
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
 }
 
 /* Base Headings */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
-    color: #4a0e91; /* Deeper purple for headings */
+    color: var(--text-headings);
 }
 
 /* Links */
 a {
     text-decoration: none;
-    color: #6a0dad; /* Primary link color */
+    color: var(--text-accent);
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #8c52ff; /* Lighter purple on hover */
+    color: var(--text-link);
 }
 
 /* --- Layouts & Containers --- */
@@ -42,15 +122,13 @@ a:hover {
     min-height: 100vh;
 }
 
-/* New: for components that need minimum height relative to content area */
 .min-h-content-area {
-    min-height: calc(100vh - 6rem - 3rem); /* Adjust based on navbar/header/footer height */
-    /* Assuming navbar height ~4rem, and some top/bottom padding 1.5rem each */
-    /* This needs to be refined based on exact Navbar/main padding in App.js/Dashboard.js */
-    /* For simplicity, let's use a percentage of viewport height for now if precise calculation is complex */
-    min-height: 70vh; /* Approximate for dynamic content within main */
+    min-height: calc(100vh - 4rem - 3rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
-
 
 .flex-center {
     display: flex;
@@ -67,14 +145,19 @@ a:hover {
     text-align: center;
 }
 
-/* Container for content sections (e.g., LettersUnsent, TimeCapsules) */
-.container {
-    max-width: 1200px; /* Max width for content */
-    margin: 0 auto; /* Center align */
-    padding: 1.5rem; /* Default padding */
-    flex-grow: 1; /* Allow container to grow and fill space */
+.flex-between-center {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    flex-grow: 1;
+}
 
 /* Padding Utilities */
 .p-6 { padding: 1.5rem; }
@@ -100,75 +183,32 @@ a:hover {
 .gap-1-5rem { gap: 1.5rem; }
 .gap-0-75rem { gap: 0.75rem; }
 
-
 /* Max Width Utilities */
-.max-w-md { max-width: 28rem; } /* ~448px for forms */
-.max-w-2xl { max-width: 42rem; } /* ~672px for text blocks/larger forms */
+.max-w-md { max-width: 28rem; }
+.max-w-2xl { max-width: 42rem; }
 .w-full { width: 100%; }
 .w-90-percent { width: 90%; }
 
-/* Specific margin for form when shown as a "modal" type spacing */
 .form-modal-spacing {
-    margin: 0 auto 2rem auto; /* Centers the form and adds bottom margin */
+    margin: 0 auto 2rem auto;
 }
 
-
-/* --- Colors & Backgrounds --- */
-.bg-purple-gradient {
-    background: linear-gradient(135deg, #a78bfa, #8b5cf6); /* Light purple to medium purple */
-}
-
+/* --- Colors & Backgrounds (converted to use variables) --- */
 .bg-purple-soft-gradient {
-    background: linear-gradient(135deg, #e9d5ff, #c4b5fd); /* Very soft purple gradient */
+    background: linear-gradient(135deg, var(--bg-main-light), var(--bg-main-dark));
 }
-
-.bg-white { background-color: #ffffff; }
-.text-white { color: #ffffff; }
-.text-gray-800 { color: #1f2937; }
-.text-gray-700 { color: #374151; }
-.text-gray-600 { color: #4b5563; }
-.text-gray-500 { color: #6b7280; }
-.text-purple-600 { color: #8b5cf6; }
-.text-purple-700 { color: #6a0dad; } /* Darker purple text */
-.text-purple-800 { color: #4a0e91; } /* Even darker purple text */
-.text-indigo-600 { color: #5B21B6; } /* Indigo for primary actions */
-.text-indigo-700 { color: #4C1D95; }
-.text-red-100 { background-color: #fee2e2; } /* Light red background for errors */
-.text-red-500 { color: #ef4444; }
-.text-red-600 { color: #dc2626; }
-.text-red-700 { color: #b91c1c; }
-.text-red-800 { color: #991b1b; }
-.border-red-400 { border-color: #f87171; }
-
-
-/* --- Typography --- */
-.text-sm { font-size: 0.875rem; }
-.text-md { font-size: 1rem; }
-.text-lg { font-size: 1.125rem; }
-.text-xl { font-size: 1.25rem; }
-.text-2xl { font-size: 1.5rem; }
-.text-3xl { font-size: 1.875rem; }
-.text-4xl { font-size: 2.25rem; }
-.text-5xl { font-size: 3rem; }
-.text-6xl { font-size: 3.75rem; }
-
-.font-normal { font-weight: 400; }
-.font-medium { font-weight: 500; }
-.font-semibold { font-weight: 600; }
-.font-bold { font-weight: 700; }
-.font-extrabold { font-weight: 800; }
-
-.tracking-tight { letter-spacing: -0.025em; }
-.leading-tight { line-height: 1.25; }
-
-/* Specific style for Home subtitle */
-.home-subtitle {
-    margin: 0 auto; /* Center align */
-}
+.text-gray-800 { color: var(--text-primary); }
+.text-gray-700 { color: var(--text-secondary); }
+.text-gray-600 { color: var(--text-tertiary); }
+.text-gray-500 { color: var(--text-tertiary); }
+.text-purple-700 { color: var(--text-headings); }
+.text-indigo-700 { color: var(--text-accent); }
+.text-red-100 { background-color: var(--error-bg); }
+.text-red-800 { color: var(--error-text); }
 
 
 /* --- Forms --- */
-.form-content { /* Applied to the form element directly for spacing */
+.form-content {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -179,7 +219,7 @@ a:hover {
 
 .form-label {
     display: block;
-    color: #333;
+    color: var(--text-primary);
     font-size: 0.875rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
@@ -188,17 +228,18 @@ a:hover {
 .form-input {
     width: 100%;
     padding: 0.75rem 1rem;
-    border: 1px solid #d1d5db; /* Light gray border */
-    border-radius: 0.5rem; /* Rounded corners */
+    border: 1px solid var(--border-light);
+    border-radius: 0.5rem;
     font-size: 1rem;
-    color: #1f2937;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    color: var(--text-primary);
+    background-color: var(--bg-card);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.5s ease, color 0.5s ease;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: #6a0dad; /* Purple focus border */
-    box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2); /* Light purple glow */
+    border-color: var(--focus-border);
+    box-shadow: 0 0 0 3px var(--focus-shadow);
 }
 
 /* --- Buttons --- */
@@ -207,50 +248,50 @@ a:hover {
     padding: 0.75rem 1.5rem;
     font-size: 1.125rem;
     font-weight: 600;
-    border-radius: 9999px; /* Fully rounded/pill shape */
+    border-radius: 9999px;
     cursor: pointer;
     text-align: center;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px var(--shadow-light);
 }
 
 .btn-primary {
-    background-color: #6a0dad; /* Purple */
-    color: #ffffff;
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
     border: none;
 }
 
 .btn-primary:hover {
-    background-color: #4a0e91; /* Darker purple on hover */
+    background-color: var(--button-primary-hover-bg);
     transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 8px var(--shadow-dark);
 }
 
 .btn-secondary {
-    background-color: #e0e7ff; /* Light blue-purple */
-    color: #5B21B6; /* Darker blue-purple text */
-    border: 1px solid #c4b5fd;
+    background-color: var(--button-secondary-bg);
+    color: var(--button-secondary-text);
+    border: 1px solid var(--button-secondary-hover-bg);
 }
 
 .btn-secondary:hover {
-    background-color: #c4b5fd;
+    background-color: var(--button-secondary-hover-bg);
     transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 8px var(--shadow-dark);
 }
 
 .btn-danger {
-    background-color: #ef4444; /* Red */
-    color: #ffffff;
+    background-color: var(--button-danger-bg); /* Now uses dedicated danger background var */
+    color: var(--button-danger-text); /* Now uses dedicated danger text var */
     border: none;
 }
 
 .btn-danger:hover {
-    background-color: #dc2626; /* Darker red on hover */
+    background-color: var(--button-danger-hover-bg); /* Now uses dedicated danger hover background var */
     transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 8px var(--shadow-dark);
 }
 
-.btn-sm { /* Smaller button variant for cards */
+.btn-sm {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
 }
@@ -262,64 +303,80 @@ a:hover {
     box-shadow: none;
 }
 
+/* Style for the Dark Mode Toggle Button (as a simple icon button) */
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.8rem;
+    padding: 0.25rem;
+    transition: transform 0.2s ease;
+}
+
+.btn-icon:hover {
+    transform: scale(1.1);
+}
+
+
 /* --- Cards / Panels --- */
 .card {
-    background-color: #ffffff;
+    background-color: var(--bg-card);
     padding: 2rem;
-    border-radius: 1rem; /* More rounded corners */
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Deeper shadow */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px var(--shadow-medium);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.5s ease, color 0.5s ease;
 }
 
 .card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 20px var(--shadow-dark);
 }
 
 /* --- Navbar --- */
 .navbar {
-    background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    background-color: var(--navbar-bg);
+    box-shadow: 0 2px 4px var(--shadow-light);
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
+    transition: background-color 0.5s ease, box-shadow 0.5s ease, color 0.5s ease;
 }
 
 .navbar-brand {
     font-size: 1.8rem;
     font-weight: 800;
-    color: #6a0dad;
+    color: var(--text-headings);
     transition: color 0.3s ease;
 }
 
 .navbar-brand:hover {
-    color: #8c52ff;
+    color: var(--text-accent);
 }
 
 .navbar-links {
     display: flex;
     align-items: center;
-    gap: 1.5rem; /* Space between links */
+    gap: 1.5rem;
 }
 
 .navbar-link {
     font-size: 1rem;
     font-weight: 500;
-    color: #5B21B6; /* Indigo link color */
+    color: var(--text-link);
     transition: color 0.3s ease;
 }
 
 .navbar-link:hover {
-    color: #6a0dad; /* Purple on hover */
+    color: var(--text-accent);
 }
 
 /* --- Dashboard Grid --- */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -330,43 +387,43 @@ a:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
+    background-color: var(--bg-card);
     padding: 2rem;
     border-radius: 1rem;
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 8px 15px var(--shadow-medium);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.5s ease, color 0.5s ease;
     text-align: center;
     cursor: pointer;
 }
 
 .dashboard-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 12px 20px var(--shadow-dark);
 }
 
 .dashboard-card-icon {
-    font-size: 3.5rem; /* Larger icons */
+    font-size: 3.5rem;
     margin-bottom: 0.75rem;
-    color: #6a0dad; /* Icon color */
+    color: var(--text-headings);
 }
 
 .dashboard-card-title {
     font-size: 1.6rem;
     font-weight: 700;
-    color: #4a0e91;
+    color: var(--text-headings);
     margin-bottom: 0.5rem;
 }
 
 .dashboard-card-description {
     font-size: 0.95rem;
-    color: #6b7280;
+    color: var(--text-secondary);
 }
 
 /* --- Error Messages --- */
 .error-message {
-    background-color: #fee2e2;
-    border: 1px solid #f87171;
-    color: #b91c1c;
+    background-color: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: var(--error-text);
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     font-size: 0.9rem;
@@ -376,9 +433,9 @@ a:hover {
 
 /* --- Success Messages --- */
 .success-message {
-    background-color: #d1fae5; /* Light green */
-    border: 1px solid #6ee7b7; /* Green border */
-    color: #047857; /* Dark green text */
+    background-color: var(--success-bg);
+    border: 1px solid var(--success-border);
+    color: var(--success-text);
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     font-size: 0.9rem;
@@ -394,36 +451,34 @@ a:hover {
 }
 
 .letter-card {
-    /* Inherits general .card styles */
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align text to start */
-    text-align: left; /* Ensure text alignment for content */
-    flex-grow: 1; /* Allows cards to grow and fill available space */
+    align-items: flex-start;
+    text-align: left;
+    flex-grow: 1;
 }
 
 .letter-content-preview {
-    flex-grow: 1; /* Allow content to take up available vertical space */
-    overflow: hidden; /* Hide overflow if content is too long */
+    flex-grow: 1;
+    overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 4; /* Limit to 4 lines for preview */
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
 }
 
 .letter-date {
-    margin-top: auto; /* Push date to the bottom of the card */
+    margin-top: auto;
 }
 
 .letter-card-actions {
     display: flex;
     justify-content: center;
-    width: 100%; /* Ensure actions span full width */
-    gap: 0.75rem; /* Space between buttons */
+    width: 100%;
+    gap: 0.75rem;
 }
 
 /* --- Time Capsules Specific Styles --- */
 .time-capsule-card {
-    /* Inherits general .card styles, adds specific overrides */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -432,7 +487,7 @@ a:hover {
 }
 
 .time-capsule-created-date {
-    margin-top: auto; /* Push date to bottom */
+    margin-top: auto;
 }
 
 .time-capsule-actions {
@@ -450,7 +505,6 @@ a:hover {
 }
 
 .technique-card {
-    /* Inherits general .card styles */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -470,14 +524,18 @@ a:hover {
 }
 
 .profile-section-card {
-    max-width: 800px; /* Wider for list content */
+    max-width: 800px;
     margin: 0 auto 2rem auto;
     display: flex;
     flex-direction: column;
 }
 
+h3.flex-between-center {
+    margin-bottom: 1.5rem;
+}
+
 .profile-view-all {
-    margin-left: auto; /* Push button to the right */
+    /* This class acts as a utility, no specific styling for it here as it's a button */
 }
 
 .profile-list {
@@ -491,7 +549,7 @@ a:hover {
     justify-content: space-between;
     align-items: baseline;
     padding: 0.5rem 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-light);
 }
 
 .profile-list-item:last-child {
@@ -500,7 +558,7 @@ a:hover {
 
 .profile-list-title {
     font-weight: 500;
-    color: #4a0e91;
+    color: var(--text-headings);
     flex-grow: 1;
     margin-right: 1rem;
     overflow: hidden;
@@ -510,7 +568,7 @@ a:hover {
 
 .profile-list-date {
     font-size: 0.85rem;
-    color: #6b7280;
+    color: var(--text-tertiary);
     flex-shrink: 0;
 }
 
@@ -533,7 +591,7 @@ a:hover {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
-    .text-username-hide-sm { /* For 'Hello, username!' on Navbar */
+    .text-username-hide-sm {
         display: none;
     }
     .profile-list-item {
@@ -546,7 +604,7 @@ a:hover {
     }
 }
 
-@media (min-width: 640px) { /* Equivalent to sm:inline */
+@media (min-width: 640px) {
     .text-username-show-sm {
         display: inline;
     }
