@@ -1,16 +1,11 @@
-/* Global CSS for SoulSpace - Custom Styling */
-
-/* Google Fonts - Inter (for a modern, clean look) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-/* Basic Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Define CSS Variables for light mode (default) */
 :root {
     --bg-main-light: #f0f4f8;
     --bg-main-dark: #e6e9f0;
@@ -19,8 +14,8 @@
     --text-secondary: #4b5563;
     --text-tertiary: #6b7280;
     --text-headings: #4a0e91;
-    --text-accent: #6a0dad; /* Primary link/highlight */
-    --text-link: #5B21B6; /* For specific links */
+    --text-accent: #6a0dad; 
+    --text-link: #5B21B6; 
 
     --button-primary-bg: #6a0dad;
     --button-primary-text: #ffffff;
@@ -30,9 +25,9 @@
     --button-secondary-text: #5B21B6;
     --button-secondary-hover-bg: #c4b5fd;
 
-    --button-danger-bg: #ef4444; /* Specific red for danger button */
-    --button-danger-text: #ffffff; /* White text on danger button */
-    --button-danger-hover-bg: #dc2626; /* Darker red on hover */
+    --button-danger-bg: #ef4444; 
+    --button-danger-text: #ffffff; 
+    --button-danger-hover-bg: #dc2626; 
 
     --border-light: #d1d5db;
     --focus-border: #6a0dad;
@@ -49,38 +44,37 @@
     --success-text: #047857;
 }
 
-/* Dark mode variables */
 .dark-mode {
-    --bg-main-light: #1a202c; /* Dark charcoal */
-    --bg-main-dark: #2d3748; /* Darker grey-blue */
-    --bg-card: #2f374a; /* Slightly lighter than main background for cards */
-    --text-primary: #e2e8f0; /* Light gray */
-    --text-secondary: #cbd5e0; /* Lighter gray */
-    --text-tertiary: #a0aec0; /* Medium gray */
-    --text-headings: #a78bfa; /* Light purple */
-    --text-accent: #c4b5fd; /* Lighter purple */
-    --text-link: #a78bfa; /* Matches headings/accent */
+    --bg-main-light: #1a202c; 
+    --bg-main-dark: #2d3748; 
+    --bg-card: #2f374a;
+    --text-primary: #e2e8f0; 
+    --text-secondary: #cbd5e0; 
+    --text-tertiary: #a0aec0; 
+    --text-headings: #a78bfa;
+    --text-accent: #c4b5fd; 
+    --text-link: #a78bfa; 
 
-    --button-primary-bg: #8b5cf6; /* Original purple, stands out */
+    --button-primary-bg: #8b5cf6; 
     --button-primary-text: #ffffff;
     --button-primary-hover-bg: #7c3aed;
 
-    --button-secondary-bg: #4a5568; /* Darker secondary */
+    --button-secondary-bg: #4a5568; 
     --button-secondary-text: #e2e8f0;
     --button-secondary-hover-bg: #6b7280;
 
-    --button-danger-bg: #b91c1c; /* Darker red for danger button in dark mode */
-    --button-danger-text: #ffffff; /* White text remains */
-    --button-danger-hover-bg: #8b0000; /* Even darker red on hover */
+    --button-danger-bg: #b91c1c; 
+    --button-danger-text: #ffffff; 
+    --button-danger-hover-bg: #8b0000; 
 
     --border-light: #4a5568;
     --focus-border: #a78bfa;
     --focus-shadow: rgba(167, 139, 250, 0.3);
-    --shadow-light: rgba(0, 0, 0, 0.3); /* Darker shadows for dark mode contrast */
+    --shadow-light: rgba(0, 0, 0, 0.3); 
     --shadow-medium: rgba(0, 0, 0, 0.4);
     --shadow-dark: rgba(0, 0, 0, 0.5);
-    --navbar-bg: #2d3748; /* Darker navbar */
-    --error-bg: #fca5a5; /* Lighter red for visibility */
+    --navbar-bg: #2d3748; 
+    --error-bg: #fca5a5; 
     --error-border: #ef4444;
     --error-text: #7f1d1d;
     --success-bg: #a7f3d0;
@@ -88,7 +82,6 @@
     --success-text: #065f46;
 }
 
-/* Apply CSS variables throughout the stylesheet */
 body {
     font-family: 'Inter', sans-serif;
     line-height: 1.6;
@@ -97,16 +90,14 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    transition: background-color 0.5s ease, color 0.5s ease; /* Smooth transition for theme change */
+    transition: background-color 0.5s ease, color 0.5s ease; 
 }
 
-/* Base Headings */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     color: var(--text-headings);
 }
 
-/* Links */
 a {
     text-decoration: none;
     color: var(--text-accent);
@@ -117,7 +108,6 @@ a:hover {
     color: var(--text-link);
 }
 
-/* --- Layouts & Containers --- */
 .min-h-screen {
     min-height: 100vh;
 }
@@ -159,13 +149,11 @@ a:hover {
     flex-grow: 1;
 }
 
-/* Padding Utilities */
 .p-6 { padding: 1.5rem; }
 .p-8 { padding: 2rem; }
 .p-10 { padding: 2.5rem; }
 .p-12 { padding: 3rem; }
 
-/* Margin-bottom Utilities */
 .mb-2 { margin-bottom: 0.5rem; }
 .mb-4 { margin-bottom: 1rem; }
 .mb-6 { margin-bottom: 1.5rem; }
@@ -177,13 +165,11 @@ a:hover {
 .mt-12 { margin-top: 3rem; }
 .ml-2 { margin-left: 0.5rem; }
 
-/* Gap Utilities for Flex/Grid */
 .gap-4 { gap: 1rem; }
 .gap-6 { gap: 1.5rem; }
 .gap-1-5rem { gap: 1.5rem; }
 .gap-0-75rem { gap: 0.75rem; }
 
-/* Max Width Utilities */
 .max-w-md { max-width: 28rem; }
 .max-w-2xl { max-width: 42rem; }
 .w-full { width: 100%; }
@@ -193,7 +179,6 @@ a:hover {
     margin: 0 auto 2rem auto;
 }
 
-/* --- Colors & Backgrounds (converted to use variables) --- */
 .bg-purple-soft-gradient {
     background: linear-gradient(135deg, var(--bg-main-light), var(--bg-main-dark));
 }
@@ -207,14 +192,12 @@ a:hover {
 .text-red-800 { color: var(--error-text); }
 
 
-/* --- Forms --- */
 .form-content {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 .form-group {
-    /* No specific margin-bottom here, handled by form-content gap */
 }
 
 .form-label {
@@ -242,7 +225,6 @@ a:hover {
     box-shadow: 0 0 0 3px var(--focus-shadow);
 }
 
-/* --- Buttons --- */
 .btn {
     display: inline-block;
     padding: 0.75rem 1.5rem;
@@ -280,13 +262,13 @@ a:hover {
 }
 
 .btn-danger {
-    background-color: var(--button-danger-bg); /* Now uses dedicated danger background var */
-    color: var(--button-danger-text); /* Now uses dedicated danger text var */
+    background-color: var(--button-danger-bg); 
+    color: var(--button-danger-text); 
     border: none;
 }
 
 .btn-danger:hover {
-    background-color: var(--button-danger-hover-bg); /* Now uses dedicated danger hover background var */
+    background-color: var(--button-danger-hover-bg); 
     transform: translateY(-2px);
     box-shadow: 0 6px 8px var(--shadow-dark);
 }
@@ -303,7 +285,6 @@ a:hover {
     box-shadow: none;
 }
 
-/* Style for the Dark Mode Toggle Button (as a simple icon button) */
 .btn-icon {
     background: none;
     border: none;
@@ -318,7 +299,6 @@ a:hover {
 }
 
 
-/* --- Cards / Panels --- */
 .card {
     background-color: var(--bg-card);
     padding: 2rem;
@@ -332,7 +312,6 @@ a:hover {
     box-shadow: 0 15px 20px var(--shadow-dark);
 }
 
-/* --- Navbar --- */
 .navbar {
     background-color: var(--navbar-bg);
     box-shadow: 0 2px 4px var(--shadow-light);
@@ -373,7 +352,6 @@ a:hover {
     color: var(--text-accent);
 }
 
-/* --- Dashboard Grid --- */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -419,7 +397,6 @@ a:hover {
     color: var(--text-secondary);
 }
 
-/* --- Error Messages --- */
 .error-message {
     background-color: var(--error-bg);
     border: 1px solid var(--error-border);
@@ -431,7 +408,6 @@ a:hover {
     margin-bottom: 1rem;
 }
 
-/* --- Success Messages --- */
 .success-message {
     background-color: var(--success-bg);
     border: 1px solid var(--success-border);
@@ -443,7 +419,6 @@ a:hover {
     margin-bottom: 1rem;
 }
 
-/* --- Letters Unsent Specific Styles --- */
 .letters-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -477,7 +452,6 @@ a:hover {
     gap: 0.75rem;
 }
 
-/* --- Time Capsules Specific Styles --- */
 .time-capsule-card {
     display: flex;
     flex-direction: column;
@@ -497,7 +471,6 @@ a:hover {
     gap: 0.75rem;
 }
 
-/* --- Techniques Grid (for Loop Breaker, Soul Notes, Breath & Ground) --- */
 .techniques-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -516,7 +489,6 @@ a:hover {
     margin-top: auto;
 }
 
-/* --- User Profile Specific Styles --- */
 .user-profile-info {
     max-width: 600px;
     margin: 0 auto 2rem auto;
@@ -535,7 +507,6 @@ h3.flex-between-center {
 }
 
 .profile-view-all {
-    /* This class acts as a utility, no specific styling for it here as it's a button */
 }
 
 .profile-list {
@@ -573,7 +544,6 @@ h3.flex-between-center {
 }
 
 
-/* --- Responsive Adjustments --- */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
