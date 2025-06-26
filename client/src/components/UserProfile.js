@@ -15,7 +15,6 @@ function UserProfile() {
       setIsLoading(true);
       setErrors([]);
 
-      // Fetch all data in parallel using Promise.all for efficiency
       Promise.all([
         fetch('/letters').then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err.errors || 'Failed to fetch letters.'))),
         fetch('/time_capsules').then(res => res.ok ? res.json() : res.json().then(err => Promise.reject(err.errors || 'Failed to fetch time capsules.'))),
@@ -28,43 +27,37 @@ function UserProfile() {
       })
       .catch(err => {
         console.error("Error loading user profile data:", err);
-        // Ensure errors are always an array for consistent display
         setErrors(Array.isArray(err) ? err : ['Failed to load profile data. Please try again.']);
       })
       .finally(() => {
         setIsLoading(false);
       });
     } else {
-      setIsLoading(false); // If no user, stop loading immediately
+      setIsLoading(false); 
       setLetters([]);
       setTimeCapsules([]);
       setUserNotes([]);
     }
-  }, [user]); // Re-fetch data if the logged-in user changes
+  }, [user]); 
 
-  // Helper function to format date strings for display
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString();
   };
 
-  // Helper function to check if a time capsule's open date has passed
   const isCapsuleOpenable = (dateString) => {
     const open = new Date(dateString);
     const now = new Date();
-    // Compare dates (ignoring time) to prevent issues with timezone differences
     return open.setHours(0,0,0,0) <= now.setHours(0,0,0,0);
   };
 
-  // Conditional rendering for loading state
   if (isLoading) {
     return (
-      <div className="container p-6 flex-center min-h-content-area"> {/* Uses min-h-content-area from index.css */}
+      <div className="container p-6 flex-center min-h-content-area"> 
         <p className="text-xl font-semibold text-purple-700">Loading your SoulSpace profile...</p>
       </div>
     );
   }
 
-  // Conditional rendering for error state
   if (errors.length > 0) {
     return (
       <div className="container p-6 flex-center min-h-content-area">
@@ -91,15 +84,13 @@ function UserProfile() {
         </div>
       )}
 
-      {/* Letters Unsent Summary Section */}
       <div className="profile-section-card card mb-8">
-        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-between-center"> {/* Uses flex-between-center from index.css */}
-          Letters Unsent ({letters.length})
+        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-between-center"> 
           <Link to="/dashboard/letters" className="btn btn-secondary btn-sm profile-view-all">View All</Link>
         </h3>
         {letters.length > 0 ? (
           <ul className="profile-list">
-            {letters.slice(0, 3).map(letter => ( // Show top 3 letters
+            {letters.slice(0, 3).map(letter => ( 
               <li key={letter.id} className="profile-list-item">
                 <span className="profile-list-title">{letter.title}</span>
                 <span className="profile-list-date">({formatDate(letter.created_at)})</span>
@@ -116,15 +107,14 @@ function UserProfile() {
         )}
       </div>
 
-      {/* Time Capsules Summary Section */}
       <div className="profile-section-card card mb-8">
-        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-between-center"> {/* Uses flex-between-center from index.css */}
+        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-between-center"> 
           Time Capsules ({timeCapsules.length})
           <Link to="/dashboard/time-capsules" className="btn btn-secondary btn-sm profile-view-all">View All</Link>
         </h3>
         {timeCapsules.length > 0 ? (
           <ul className="profile-list">
-            {timeCapsules.slice(0, 3).map(capsule => ( // Show top 3 capsules
+            {timeCapsules.slice(0, 3).map(capsule => ( 
               <li key={capsule.id} className="profile-list-item">
                 <span className="profile-list-title">
                   {isCapsuleOpenable(capsule.open_date) ? "Open" : "Sealed"} until {formatDate(capsule.open_date)}
@@ -143,15 +133,14 @@ function UserProfile() {
         )}
       </div>
 
-      {/* The Quiet Page Notes Summary Section */}
       <div className="profile-section-card card">
-        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-between-center"> {/* Uses flex-between-center from index.css */}
+        <h3 className="text-2xl font-bold text-indigo-700 mb-4 flex-between-center"> 
           Quiet Page Notes ({userNotes.length})
           <Link to="/dashboard/quiet-page" className="btn btn-secondary btn-sm profile-view-all">View Page</Link>
         </h3>
         {userNotes.length > 0 ? (
           <ul className="profile-list">
-            {userNotes.slice(0, 3).map(note => ( // Show top 3 notes
+            {userNotes.slice(0, 3).map(note => ( 
               <li key={note.id} className="profile-list-item">
                 <span className="profile-list-title">
                   {note.content.substring(0, 50)}{note.content.length > 50 ? '...' : ''}

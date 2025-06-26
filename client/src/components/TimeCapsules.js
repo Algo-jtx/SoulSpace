@@ -5,13 +5,12 @@ function TimeCapsules() {
   const { user } = useContext(UserContext);
   const [timeCapsules, setTimeCapsules] = useState([]);
   const [message, setMessage] = useState('');
-  const [openDate, setOpenDate] = useState(''); // Format: YYYY-MM-DD
+  const [openDate, setOpenDate] = useState(''); 
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [editingCapsule, setEditingCapsule] = useState(null);
   const [showForm, setShowForm] = useState(false);
 
-  // Function to fetch all time capsules
   const fetchTimeCapsules = () => {
     setIsLoading(true);
     fetch('/time_capsules')
@@ -42,16 +41,13 @@ function TimeCapsules() {
     }
   }, [user]);
 
-  // Function to handle creating/updating a time capsule
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
     setIsLoading(true);
 
-    // Basic date validation for future date
     const selectedDate = new Date(openDate);
     const now = new Date();
-    // Set both to midnight for accurate comparison, ignoring time
     selectedDate.setHours(0,0,0,0);
     now.setHours(0,0,0,0);
 
@@ -69,7 +65,7 @@ function TimeCapsules() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message, open_date: openDate }), // Backend expects YYYY-MM-DD format
+      body: JSON.stringify({ message, open_date: openDate }),
     })
       .then(response => {
         if (response.ok) {
@@ -98,7 +94,6 @@ function TimeCapsules() {
       });
   };
 
-  // Function to handle deleting a time capsule
   const handleDelete = (capsuleId) => {
     if (!window.confirm("Are you sure you want to delete this time capsule? This action cannot be undone.")) {
       return;
@@ -125,18 +120,15 @@ function TimeCapsules() {
       });
   };
 
-  // Function to open the form for editing an existing time capsule
   const handleEditClick = (capsule) => {
     setEditingCapsule(capsule);
     setMessage(capsule.message);
-    // Format date string for input type="date" (YYYY-MM-DD)
     const date = new Date(capsule.open_date);
     const formattedDate = date.toISOString().split('T')[0];
     setOpenDate(formattedDate);
     setShowForm(true);
   };
 
-  // Function to reset the form
   const handleCancelEdit = () => {
     setEditingCapsule(null);
     setMessage('');
@@ -145,7 +137,6 @@ function TimeCapsules() {
     setErrors([]);
   };
 
-  // Helper to determine if capsule is openable
   const isCapsuleOpenable = (dateString) => {
     const open = new Date(dateString);
     const now = new Date();
@@ -165,7 +156,6 @@ function TimeCapsules() {
         </button>
       </div>
 
-      {/* Time Capsule Creation/Editing Form */}
       {showForm && (
         <div className="card max-w-2xl form-modal-spacing">
           <h3 className="text-2xl font-bold text-indigo-700 mb-4 text-center">
@@ -213,7 +203,6 @@ function TimeCapsules() {
         </div>
       )}
 
-      {/* Display Loading/Error/No Time Capsules */}
       {isLoading && <p className="text-center text-purple-700 text-lg">Loading time capsules...</p>}
       {errors.length > 0 && !isLoading && (
         <div className="error-message text-center" role="alert">
@@ -225,9 +214,8 @@ function TimeCapsules() {
         <p className="text-center text-gray-600 text-lg">No time capsules found. Click "Create New Time Capsule" to get started!</p>
       )}
 
-      {/* Time Capsules List */}
       {!isLoading && timeCapsules.length > 0 && (
-        <div className="time-capsules-grid letters-grid"> {/* Reusing letters-grid for layout */}
+        <div className="time-capsules-grid letters-grid"> 
           {timeCapsules.map(capsule => (
             <div key={capsule.id} className="time-capsule-card card">
               <h3 className="text-xl font-bold text-indigo-700 mb-2">

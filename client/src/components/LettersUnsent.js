@@ -86,7 +86,6 @@ function LettersUnsent() {
       });
   };
 
-  // deleting a letter
   const handleDelete = (letterId) => {
     if (!window.confirm("Are you sure you want to delete this letter? This action cannot be undone.")) {
       return; 
@@ -114,7 +113,6 @@ function LettersUnsent() {
       });
   };
 
-  //open the form for editing an existing letter
   const handleEditClick = (letter) => {
     setEditingLetter(letter);
     setTitle(letter.title);

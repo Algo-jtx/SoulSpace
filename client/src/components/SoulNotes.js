@@ -5,11 +5,10 @@ function SoulNotes() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState([]);
 
-  // Function to fetch a new random soul note
   const fetchNewSoulNote = () => {
     setIsLoading(true);
     setErrors([]);
-    setSoulNote(null); // Clear previous note while loading
+    setSoulNote(null); 
 
     fetch('/soul_notes/random')
       .then(response => {
@@ -30,7 +29,6 @@ function SoulNotes() {
       });
   };
 
-  // Fetch a note when the component mounts
   useEffect(() => {
     fetchNewSoulNote();
   }, []);
