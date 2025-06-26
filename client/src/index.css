@@ -1,7 +1,365 @@
-:root {
-  --bg: #282c34;
-  --header: #fff;
-  --link: #61dafb;
-  --text: hsla(0, 0%, 100%, 0.88);
+/* Global CSS for SoulSpace - Custom Styling */
+
+/* Google Fonts - Inter (for a modern, clean look) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #f0f4f8, #e6e9f0); /* Soft background gradient */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Base Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    color: #4a0e91; /* Deeper purple for headings */
+}
+
+/* Links */
+a {
+    text-decoration: none;
+    color: #6a0dad; /* Primary link color */
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #8c52ff; /* Lighter purple on hover */
+}
+
+/* --- Layouts & Containers --- */
+.min-h-screen {
+    min-height: 100vh;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Padding Utilities */
+.p-6 { padding: 1.5rem; }
+.p-8 { padding: 2rem; }
+.p-10 { padding: 2.5rem; }
+.p-12 { padding: 3rem; }
+
+/* Margin-bottom Utilities */
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mt-2 { margin-top: 0.5rem; } /* Added */
+.mt-6 { margin-top: 1.5rem; }
+.mt-8 { margin-top: 2rem; }
+.mt-12 { margin-top: 3rem; }
+.ml-2 { margin-left: 0.5rem; } /* Added */
+
+/* Gap Utilities for Flex/Grid */
+.gap-4 { gap: 1rem; } /* Added */
+.gap-6 { gap: 1.5rem; }
+.gap-1-5rem { gap: 1.5rem; } /* Specific for form-content */
+
+/* Max Width Utilities */
+.max-w-md { max-width: 28rem; } /* ~448px for forms */ /* Added */
+.max-w-2xl { max-width: 42rem; } /* ~672px for text blocks */ /* Added */
+.w-full { width: 100%; }
+.w-90-percent { width: 90%; } /* Added */
+
+
+/* --- Colors & Backgrounds --- */
+.bg-purple-gradient {
+    background: linear-gradient(135deg, #a78bfa, #8b5cf6); /* Light purple to medium purple */
+}
+
+.bg-purple-soft-gradient {
+    background: linear-gradient(135deg, #e9d5ff, #c4b5fd); /* Very soft purple gradient */
+}
+
+.bg-white { background-color: #ffffff; }
+.text-white { color: #ffffff; }
+.text-gray-800 { color: #1f2937; }
+.text-gray-700 { color: #374151; } /* Added */
+.text-gray-600 { color: #4b5563; }
+.text-gray-500 { color: #6b7280; }
+.text-purple-600 { color: #8b5cf6; } /* Added */
+.text-purple-700 { color: #6a0dad; } /* Darker purple text */
+.text-purple-800 { color: #4a0e91; } /* Even darker purple text */
+.text-indigo-600 { color: #5B21B6; } /* Indigo for primary actions */
+.text-indigo-700 { color: #4C1D95; }
+.text-red-100 { background-color: #fee2e2; } /* Light red background for errors */
+.text-red-500 { color: #ef4444; }
+.text-red-600 { color: #dc2626; }
+.text-red-700 { color: #b91c1c; }
+.text-red-800 { color: #991b1b; } /* Added */
+.border-red-400 { border-color: #f87171; }
+
+
+/* --- Typography --- */
+.text-sm { font-size: 0.875rem; }
+.text-md { font-size: 1rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.text-3xl { font-size: 1.875rem; }
+.text-4xl { font-size: 2.25rem; }
+.text-5xl { font-size: 3rem; }
+.text-6xl { font-size: 3.75rem; }
+
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-extrabold { font-weight: 800; }
+
+.tracking-tight { letter-spacing: -0.025em; }
+.leading-tight { line-height: 1.25; }
+
+/* --- Forms --- */
+.form-content { /* Applied to the form element directly for spacing */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.form-group {
+    /* No specific margin-bottom here, handled by form-content gap */
+}
+
+.form-label {
+    display: block;
+    color: #333;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db; /* Light gray border */
+    border-radius: 0.5rem; /* Rounded corners */
+    font-size: 1rem;
+    color: #1f2937;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #6a0dad; /* Purple focus border */
+    box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2); /* Light purple glow */
+}
+
+/* --- Buttons --- */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    border-radius: 9999px; /* Fully rounded/pill shape */
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+    background-color: #6a0dad; /* Purple */
+    color: #ffffff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #4a0e91; /* Darker purple on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+    background-color: #e0e7ff; /* Light blue-purple */
+    color: #5B21B6; /* Darker blue-purple text */
+    border: 1px solid #c4b5fd;
+}
+
+.btn-secondary:hover {
+    background-color: #c4b5fd;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-danger {
+    background-color: #ef4444; /* Red */
+    color: #ffffff;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #dc2626; /* Darker red on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* --- Cards / Panels --- */
+.card {
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem; /* More rounded corners */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); /* Deeper shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Navbar --- */
+.navbar {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+}
+
+.navbar-brand {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #6a0dad;
+    transition: color 0.3s ease;
+}
+
+.navbar-brand:hover {
+    color: #8c52ff;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* Space between links */
+}
+
+.navbar-link {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #5B21B6; /* Indigo link color */
+    transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+    color: #6a0dad; /* Purple on hover */
+}
+
+/* --- Dashboard Grid --- */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid */
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.dashboard-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    cursor: pointer;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-card-icon {
+    font-size: 3.5rem; /* Larger icons */
+    margin-bottom: 0.75rem;
+    color: #6a0dad; /* Icon color */
+}
+
+.dashboard-card-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #4a0e91;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-card-description {
+    font-size: 0.95rem;
+    color: #6b7280;
+}
+
+/* --- Error Messages --- */
+.error-message {
+    background-color: #fee2e2;
+    border: 1px solid #f87171;
+    color: #b91c1c;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .navbar-links {
+        width: 100%;
+        justify-content: space-around;
+        gap: 0.5rem;
+    }
+    .btn {
+        width: 100%;
+    }
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+    .text-username-hide-sm { /* For 'Hello, username!' on Navbar */
+        display: none;
+    }
+}
+
+@media (min-width: 640px) { /* Equivalent to sm:inline */
+    .text-username-show-sm {
+        display: inline;
+    }
+}
