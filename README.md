@@ -1,4 +1,4 @@
-readme_content = """
+
 # SoulSpace: Your Digital Sanctuary
 
 A Personal Well-being & Reflection Web Application, June 2025
@@ -48,8 +48,6 @@ If you want to run this project locally or contribute, follow these steps:
    * Ensure you have Python 3 installed.
 
    * Ensure you have Node.js and npm (or yarn) installed.
-
-   * Familiarity with Git and GitHub is recommended.
 
    * Using WSL (Windows Subsystem for Linux) or a Linux-based system is recommended for consistent environment.
 
@@ -169,4 +167,3 @@ For any questions, feedback, or contributions, please feel free to reach out via
 ## License
 
 This project is licensed under the Apache License 2.0
-"""
