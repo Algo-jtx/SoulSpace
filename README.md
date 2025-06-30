@@ -25,19 +25,6 @@ SoulSpace is a web-based platform where users can cultivate mental well-being an
 
 The application dynamically manages content, provides user authentication for personalization, and offers a user-friendly interface with responsive design and a dark mode toggle. It's built using modern web technologies to ensure an engaging and serene experience.
 
-## Demo
-
-Visit the live site: [Link to your deployed site will go here once available]
-
-## Screenshots
-
-Dashboard:
-![Screenshot of SoulSpace Dashboard](uploaded:WhatsApp Image 2025-06-26 at 10.20.43_c5799538.jpg-166a9895-7030-49e2-a36f-630e21ca9cad)
-
-Letters Unsent:
-![Screenshot of SoulSpace Letters Unsent Page](uploaded:WhatsApp Image 2025-06-26 at 10.20.53_68c05f9a.jpg-5ea89757-cc68-4d13-8b71-4bfdc72834d6)
-
-*More screenshots (e.g., Quiet Page, Dark Mode) to be added once deployed or for updated views.*
 
 ## Setup
 
@@ -81,12 +68,6 @@ If you want to run this project locally or contribute, follow these steps:
 
      ```
      pipenv shell
-     ```
-
-   * Run database migrations to set up your SQLite database:
-
-     ```
-     flask db upgrade
      ```
 
    * Start the Flask backend server:
