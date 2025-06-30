@@ -13,15 +13,9 @@ sqlalchemy-serializer = "*"
 flask-restful = "*"
 flask-cors = "*"
 faker = "*"
-<<<<<<< HEAD
 flask-bcrypt = "*"
 
-[requires]
-python_full_version = "3.8.13"
-
 [dev-packages]
-=======
 
 [requires]
 python_full_version = "3.8.13"
->>>>>>> 602dc37c43c1920f2fa4f3962b15e8cd27be60de
