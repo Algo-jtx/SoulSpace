@@ -9,19 +9,15 @@ from flask_bcrypt import Bcrypt
 from config import db
 
 
-bcrypt = Bcrypt() # Initialize Bcrypt for password hashing
+bcrypt = Bcrypt() 
 
 class User(db.Model, SerializerMixin):
-    """
-    User model representing a user of the SoulSpace application.
-    Stores user authentication and profile information.
-    """
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    _password_hash = db.Column(db.String, nullable=False) # Stores the hashed password
+    _password_hash = db.Column(db.String, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     letters = db.relationship('Letter', backref='user', lazy=True, cascade='all, delete-orphan')
@@ -32,20 +28,17 @@ class User(db.Model, SerializerMixin):
 
     @hybrid_property
     def password_hash(self):
-        """Property to prevent direct access to the hashed password."""
         raise AttributeError('Password hashes may not be read.')
 
     @password_hash.setter
     def password_hash(self, password):
-        """Setter to hash the password before storing it."""
         if not isinstance(password, str):
             raise TypeError("Password must be a string.")
-        if len(password) < 6: # Example: minimum password length
+        if len(password) < 6: 
             raise ValueError("Password must be at least 6 characters long.")
         self._password_hash = bcrypt.generate_password_hash(password.encode('utf-8')).decode('utf-8')
 
     def authenticate(self, password):
-        """Authenticates a user by checking the provided password against the stored hash."""
         return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
 
     def __repr__(self):
@@ -53,7 +46,6 @@ class User(db.Model, SerializerMixin):
 
     @db.validates('email')
     def validate_email(self, key, email):
-        """Validates the email format."""
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             raise ValueError("Invalid email format.")
         
@@ -64,7 +56,6 @@ class User(db.Model, SerializerMixin):
 
     @db.validates('username')
     def validate_username(self, key, username):
-        """Validates the username for uniqueness and length."""
         if not username:
             raise ValueError("Username cannot be empty.")
         if len(username) < 3 or len(username) > 80:
@@ -75,9 +66,6 @@ class User(db.Model, SerializerMixin):
         return username
 
 class Letter(db.Model, SerializerMixin):
-    """
-    Letter model for private, unsent letters.
-    """
     __tablename__ = 'letters'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -93,22 +81,17 @@ class Letter(db.Model, SerializerMixin):
 
     @db.validates('title')
     def validate_title(self, key, title):
-        """Validates the letter title."""
         if not title or len(title) > 255:
             raise ValueError("Title must be non-empty and less than 255 characters.")
         return title
 
     @db.validates('content')
     def validate_content(self, key, content):
-        """Validates the letter content."""
         if not content:
             raise ValueError("Content cannot be empty.")
         return content
 
 class TimeCapsule(db.Model, SerializerMixin):
-    """
-    TimeCapsule model for messages to future self.
-    """
     __tablename__ = 'time_capsules'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -117,7 +100,6 @@ class TimeCapsule(db.Model, SerializerMixin):
     open_date = db.Column(db.DateTime, nullable=False) # Date when the capsule can be opened
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Serialization rule to prevent recursive serialization
     serialize_rules = ('-user.time_capsules',)
 
     def __repr__(self):
@@ -125,22 +107,17 @@ class TimeCapsule(db.Model, SerializerMixin):
 
     @db.validates('message')
     def validate_message(self, key, message):
-        """Validates the time capsule message."""
         if not message:
             raise ValueError("Message cannot be empty.")
         return message
 
     @db.validates('open_date')
     def validate_open_date(self, key, open_date):
-        """Validates that the open_date is in the future."""
         if open_date <= datetime.utcnow():
             raise ValueError("Open date must be in the future.")
         return open_date
 
 class UserNote(db.Model, SerializerMixin):
-    """
-    UserNote model for The Quiet Page (personal notepad).
-    """
     __tablename__ = 'user_notes'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -155,16 +132,11 @@ class UserNote(db.Model, SerializerMixin):
 
     @db.validates('content')
     def validate_content(self, key, content):
-        """Validates the user note content."""
         if not content:
             raise ValueError("Note content cannot be empty.")
         return content
 
 class SoulNote(db.Model, SerializerMixin):
-    """
-    SoulNote model for short comforting thoughts from the app.
-    These are not tied to users.
-    """
     __tablename__ = 'soul_notes'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -176,7 +148,6 @@ class SoulNote(db.Model, SerializerMixin):
 
     @db.validates('message')
     def validate_message(self, key, message):
-        """Validates the soul note message."""
         if not message or len(message) > 500:
             raise ValueError("Message must be non-empty and less than 500 characters.")
         return message

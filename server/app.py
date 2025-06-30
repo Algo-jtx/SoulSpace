@@ -1,4 +1,3 @@
-# Standard library imports
 from flask import request, session, make_response, jsonify
 from flask_restful import Resource
 import traceback
@@ -7,15 +6,12 @@ from functools import wraps
 from datetime import datetime
 from random import randint, choice
 
-# Local imports
 from config import app, db, api, bcrypt
 from models import User, Letter, TimeCapsule, UserNote, SoulNote
 
-# Define a custom error for validation issues
 class ValidationError(Exception):
     pass
 
-# --- Decorator for Login Protection ---
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -28,12 +24,10 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# --- Root Route ---
 @app.route('/')
 def index():
     return '<h1>SoulSpace API</h1>'
 
-# --- Resource for Handling Errors (Keep existing) ---
 @app.errorhandler(ValidationError)
 def handle_validation_error(e):
     return make_response(jsonify({"errors": str(e)}), 400)
@@ -55,7 +49,6 @@ def handle_internal_server_error(e):
     if app.debug: print(traceback.format_exc())
     return make_response(jsonify({"errors": "An internal server error occurred."}), 500)
 
-# --- Authentication Resources (Keep existing) ---
 class Signup(Resource):
     def post(self):
         try:
@@ -210,7 +203,6 @@ class LetterByIdResource(Resource):
             return make_response(jsonify({"errors": "Failed to delete letter."}), 500)
 api.add_resource(LetterByIdResource, '/letters/<int:id>')
 
-# --- Time Capsules Resources (Keep existing) ---
 class TimeCapsulesResource(Resource):
     decorators = [login_required]
 
@@ -315,7 +307,6 @@ class TimeCapsuleByIdResource(Resource):
 api.add_resource(TimeCapsuleByIdResource, '/time_capsules/<int:id>')
 
 
-# --- User Notes Resources (The Quiet Page) ---
 class UserNotesResource(Resource):
     decorators = [login_required]
 
@@ -405,7 +396,6 @@ class UserNoteByIdResource(Resource):
 api.add_resource(UserNoteByIdResource, '/user_notes/<int:id>')
 
 
-# --- Soul Notes Resources ---
 class RandomSoulNoteResource(Resource):
     """
     Handles GET for a random SoulNote (not user-specific).
@@ -428,11 +418,8 @@ class RandomSoulNoteResource(Resource):
 api.add_resource(RandomSoulNoteResource, '/soul_notes/random')
 
 
-# --- Loop Breaker Resources ---
 class LoopBreakerPromptResource(Resource):
-    """
-    Handles GET for a random Loop Breaker prompt.
-    """
+
     def get(self):
         prompts = [
             "What is one small thing you can do right now to shift your focus?",
@@ -450,7 +437,6 @@ class LoopBreakerPromptResource(Resource):
 api.add_resource(LoopBreakerPromptResource, '/loop_breaker/prompt')
 
 
-# --- Breath and Ground Resources ---
 class BreathGroundResource(Resource):
     """
     Handles GET for Breath & Ground techniques.
@@ -472,17 +458,17 @@ class BreathGroundResource(Resource):
                 "instructions": "Place one hand on your chest and one on your belly. Breathe deeply so your belly rises, keeping your chest still. Exhale slowly.",
                 "duration": "3-5 minutes"
             },
-            { # NEW TECHNIQUE
+            { 
                 "name": "Mindful Walking",
                 "instructions": "As you walk, bring your awareness to each step: the sensation of your feet on the ground, the movement of your legs, and the rhythm of your breath. If your mind wanders, gently bring it back to your steps.",
                 "duration": "5-10 minutes"
             },
-            { # NEW TECHNIQUE
+            { 
                 "name": "Body Scan Meditation",
                 "instructions": "Lie down or sit comfortably. Bring your attention to different parts of your body, starting from your toes and slowly moving upwards. Notice any sensations without judgment. Breathe into each area.",
                 "duration": "5-15 minutes"
             },
-            { # NEW TECHNIQUE
+            {
                 "name": "Color Visualization",
                 "instructions": "Close your eyes and imagine a calming color (e.g., soft blue or green). Breathe in this color, imagining it filling your body with peace. Breathe out any tension or discomfort as a contrasting color.",
                 "duration": "3-5 minutes"
@@ -492,7 +478,6 @@ class BreathGroundResource(Resource):
 api.add_resource(BreathGroundResource, '/breath_ground')
 
 
-# --- Run the app ---
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5555))
     app.run(port=port, debug=True)
