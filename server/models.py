@@ -141,7 +141,7 @@ class SoulNote(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(500), nullable=False)
-    category = db.Column(db.String(100)) # Optional category for notes
+    category = db.Column(db.String(100))
 
     def __repr__(self):
         return f'<SoulNote {self.id} - {self.category}>'

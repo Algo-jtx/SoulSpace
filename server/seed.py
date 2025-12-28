@@ -1,4 +1,3 @@
-# Standard library imports
 from random import randint, choice
 from datetime import datetime, timedelta
 

@@ -1,36 +1,53 @@
-
-# SoulSpace: Your Digital Sanctuary
-
-A Personal Well-being & Reflection Web Application, June 2025
-
-This project is a personal web application designed to provide users with a private digital sanctuary for self-reflection, emotional processing, and mindfulness. It offers various tools to help users journal, connect with their future selves, break negative thought patterns, and practice grounding techniques. The project aims to create a secure, intuitive, and immersive experience for inner well-being.
-
-By Juanita
+# SoulSpace
 
 ## Description
+SoulSpace is a personal wellbeing web app designed to help users reflect, journal, and practice mindfulness. This project was built entirely by me, demonstrating full-stack skills in React and frontend-backend integration.
 
-SoulSpace is a web-based platform where users can cultivate mental well-being and engage in self-care. It features core functionalities such as:
+## Main Features
+- Private journal (“Letters Unsent”)  
+- Time capsules with future unlock  
+- Loop breaker random mindfulness prompts  
+- Breath & ground exercises  
 
-* **Letters Unsent:** A private journaling space to write thoughts without the pressure of sending them.
+## Screenshots
+Landing Page
+"C:\Users\HomePC\Pictures\Screenshots\Screenshot 2025-12-28 223821.png"
 
-* **Time Capsules:** Send messages to your future self, unlocked on a chosen date.
+Signup & Login page
+"C:\Users\HomePC\Pictures\Screenshots\Screenshot 2025-12-28 224015.png"
 
-* **The Quiet Page:** A flexible free-writing space to dump thoughts, allowing users to view and re-edit all past entries.
+Features
+"C:\Users\HomePC\Pictures\Screenshots\Screenshot 2025-12-28 224139.png"
+"C:\Users\HomePC\Pictures\Screenshots\Screenshot 2025-12-28 224206.png"
 
-* **Loop Breaker:** Provides random prompts to gently redirect repetitive or negative thought patterns.
+## Tech Stack
+- **Frontend:** React (functional components & hooks)  
+- **Routing:** React Router v5 for client-side navigation  
+- **State Management:** React state + localStorage  
+- **Backend:** Flask API with SQLite database (handles journaling and prompts)  
+- **UI:** HTML, CSS, responsive design  
+- **API Calls:** fetch / Axios (for frontend-backend integration)  
 
-* **Soul Notes:** Offers short, uplifting, and comforting messages for moments of peace.
+> Optional deeper details available in `/docs/TECH_DETAILS.md` (e.g., folder structure, component hierarchy, routing logic, API endpoints)
 
-* **Breath & Ground:** A curated list of simple breathing exercises and grounding techniques.
+## My Role
+I built the **entire project** from scratch:
+- Developed all React components and frontend views  
+- Implemented routing using React Router v5  
+- Integrated frontend with Flask API  
+- Managed state and localStorage logic for journaling and prompts  
+- Designed responsive layout and user interface  
 
-The application dynamically manages content, provides user authentication for personalization, and offers a user-friendly interface with responsive design and a dark mode toggle. It's built using modern web technologies to ensure an engaging and serene experience.
-
+## Challenges & Learnings
+- Learned to integrate frontend React with a backend API  
+- Worked with React Router v5 for navigation  
+- Managed state and asynchronous calls efficiently  
 
 ## Setup
 
 If you want to run this project locally or contribute, follow these steps:
 
-1. **Prerequisites:**
+1. *Prerequisites:*
 
    * Ensure you have Python 3 installed.
 
@@ -38,114 +55,68 @@ If you want to run this project locally or contribute, follow these steps:
 
    * Using WSL (Windows Subsystem for Linux) or a Linux-based system is recommended for consistent environment.
 
-2. **Clone the repository from GitHub:**
+2. *Clone the repository from GitHub:*
 
-   ```
+   
    git clone <your-repository-url-here> # Replace with your actual GitHub repo URL
-   ```
+   
 
-3. **Navigate into the project folder:**
+3. *Navigate into the project folder:*
 
-   ```
+   
    cd SoulSpace
-   ```
+   
 
-4. **Backend Setup (Flask):**
+4. *Backend Setup (Flask):*
 
-   * Navigate into the `server` directory:
+   * Navigate into the server directory:
 
-     ```
+     
      cd server
-     ```
+     
 
-   * Install Python dependencies using `pipenv`:
+   * Install Python dependencies using pipenv:
 
-     ```
+     
      pipenv install
-     ```
+     
 
    * Activate the virtual environment:
 
-     ```
+     
      pipenv shell
-     ```
+     
 
    * Start the Flask backend server:
 
-     ```
+     
      python app.py
-     ```
+     
 
-     (The server will run on `http://127.0.0.1:5555` by default)
+     (The server will run on http://127.0.0.1:5555 by default)
 
-5. **Frontend Setup (React):**
+5. *Frontend Setup (React):*
 
-   * Open a **new terminal window/tab**.
+   * Open a *new terminal window/tab*.
 
-   * Navigate back to the main project directory, then into the `client` directory:
+   * Navigate back to the main project directory, then into the client directory:
 
-     ```
+     
      cd ../client
-     ```
+     
 
    * Install Node.js dependencies:
 
-     ```
+     
      npm install
-     ```
+     
 
    * Start the React development server:
 
-     ```
+     
      npm start
-     ```
+     
 
-     (The React app will open in your browser, usually at `http://localhost:3000`)
+     (The React app will open in your browser)
 
-6. **Access the Application:**
-
-   * Ensure both the Flask backend (`python app.py`) and the React frontend (`npm start`) are running in separate terminals.
-
-   * Open your web browser and navigate to `http://localhost:3000`.
-
-## Technologies Used
-
-* **Frontend:**
-
-  * **React.js:** JavaScript library for building user interfaces.
-
-  * **React Router v5:** For declarative routing in React applications.
-
-  * **Pure CSS (with CSS Variables):** For custom styling and theming (e.g., Dark Mode).
-
-* **Backend:**
-
-  * **Flask:** Python web framework for the API.
-
-  * **SQLAlchemy:** Python SQL Toolkit and Object Relational Mapper.
-
-  * **SQLite:** Lightweight, file-based database for development.
-
-  * **Flask-RESTful:** Extension for quickly building REST APIs with Flask.
-
-  * **Bcrypt:** For secure password hashing.
-
-  * **Flask Sessions:** For user session management.
-
-* **Development Tools:**
-
-  * **Git & GitHub:** For version control and collaboration.
-
-  * **pipenv:** Python dependency management.
-
-  * **npm:** JavaScript package manager.
-
-## Support and Contact Details
-
-For any questions, feedback, or contributions, please feel free to reach out via email:
-[juanita.mumbi@student.moringaschool.com]
-
-## License
-
-This project is licensed under the Apache License 2.0
-
+ * Ensure both the Flask backend (python app.py) and the React frontend (npm start) are running in separate terminals.
