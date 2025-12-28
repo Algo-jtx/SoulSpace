@@ -10,14 +10,13 @@ SoulSpace is a personal wellbeing web app designed to help users reflect, journa
 - Breath & ground exercises  
 
 ## Screenshots
-Landing Page
+
 ![Landing page](<screenshots/Screenshot 2025-12-28 223821.png>)
 
-Signup & Login page
 ![Signup](<screenshots/Screenshot 2025-12-28 224015.png>)
 
-Features
 ![Features](<screenshots/Screenshot 2025-12-28 224139.png>)
+
 ![Features](<screenshots/Screenshot 2025-12-28 224206.png>)
 
 
@@ -55,69 +54,21 @@ If you want to run this project locally or contribute, follow these steps:
    * Ensure you have Node.js and npm (or yarn) installed.
 
    * Using WSL (Windows Subsystem for Linux) or a Linux-based system is recommended for consistent environment.
+```bash
+# 1. Clone the repository
+git clone <your-repository-url-here>
+cd SoulSpace
 
-2. *Clone the repository from GitHub:*
+# 2. Backend Setup (Flask)
+cd server
+pipenv install
+pipenv shell
+python app.py & # Starts server on [http://127.0.0.1:5555](http://127.0.0.1:5555)
 
-   
-   git clone <your-repository-url-here> # Replace with your actual GitHub repo URL
-   
-
-3. *Navigate into the project folder:*
-
-   
-   cd SoulSpace
-   
-
-4. *Backend Setup (Flask):*
-
-   * Navigate into the server directory:
-
-     
-     cd server
-     
-
-   * Install Python dependencies using pipenv:
-
-     
-     pipenv install
-     
-
-   * Activate the virtual environment:
-
-     
-     pipenv shell
-     
-
-   * Start the Flask backend server:
-
-     
-     python app.py
-     
-
-     (The server will run on http://127.0.0.1:5555 by default)
-
-5. *Frontend Setup (React):*
-
-   * Open a *new terminal window/tab*.
-
-   * Navigate back to the main project directory, then into the client directory:
-
-     
-     cd ../client
-     
-
-   * Install Node.js dependencies:
-
-     
-     npm install
-     
-
-   * Start the React development server:
-
-     
-     npm start
-     
-
-     (The React app will open in your browser)
-
+# 3. Frontend Setup (React)
+# Open a new terminal or run:
+cd ../client
+npm install
+npm start # Opens app on http://localhost:3000
+```
  * Ensure both the Flask backend (python app.py) and the React frontend (npm start) are running in separate terminals.
