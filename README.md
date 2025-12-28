@@ -11,14 +11,15 @@ SoulSpace is a personal wellbeing web app designed to help users reflect, journa
 
 ## Screenshots
 Landing Page
-"C:\Users\HomePC\Pictures\Screenshots\Screenshot 2025-12-28 223821.png"
+![Landing page](<screenshots/Screenshot 2025-12-28 223821.png>)
 
 Signup & Login page
-"C:\Users\HomePC\Pictures\Screenshots\Screenshot 2025-12-28 224015.png"
+![Signup](<screenshots/Screenshot 2025-12-28 224015.png>)
 
 Features
-"C:\Users\HomePC\Pictures\Screenshots\Screenshot 2025-12-28 224139.png"
-"C:\Users\HomePC\Pictures\Screenshots\Screenshot 2025-12-28 224206.png"
+![Features](<screenshots/Screenshot 2025-12-28 224139.png>)
+![Features](<screenshots/Screenshot 2025-12-28 224206.png>)
+
 
 ## Tech Stack
 - **Frontend:** React (functional components & hooks)  
